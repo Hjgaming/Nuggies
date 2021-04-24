@@ -12,9 +12,15 @@ Nuggies is a compact and easy to use multipurpose discord bot with loads of comm
 - [mongodb](https://www.mongodb.com/)
 - [dbl](https://top.gg) (only do this if you have a bot on top.gg)
 - [bot token](https://discord.com/developers/applications) <br>
-and paste it in the .env
-3. install the dependencies using `npm install`
-4. run the `node index.js` command
+3. get 4 webhooks for these purposes:
+- command loging
+- restart/ready logs
+- err logs
+- unhandled rejections logs
+
+4. paste the tokens and webhooks ids and tokens into the `.env`. Check out `.example.env` for more!
+5. install the dependencies using `npm install`
+6. run the `node index.js` command
 
 
 # Reporting Bugs/issues
