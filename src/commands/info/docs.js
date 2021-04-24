@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
-const config = require('../../../utils/config.json')
+const config = require('../../../utils/config.json');
 module.exports.run = async (client, message, args) => {
 	const searchQuery = args.slice().join(' ');
 	const url = `https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(searchQuery)}`;
