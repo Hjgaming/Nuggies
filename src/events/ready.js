@@ -15,7 +15,7 @@ module.exports = async (client) => {
 	automeme.find({ automeme_enabled: true }, async (err, data) => {
 		setInterval(() => {
 			for (let i = 0; i < data.length; i++) {
-				axios.get('https://api.nuggies.tech/api/meme')
+				axios.get('https://api.nuggetdev.com/api/meme')
 					.then(function(response) {
 						const embed = new Discord.MessageEmbed()
 							.setTitle(`${response.data.title}`)
