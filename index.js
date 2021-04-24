@@ -16,7 +16,7 @@ client.snipes = new Discord.Collection();
 client.esnipes = new Discord.Collection();
 client.data = require('./functions/mongo');
 
-const unhhook = new Discord.WebhookClient('807647245130006629', 'YAMbQMjaz5aNl-8dtvoQJJkXtVi3Ptbp8c12PPA0Kd4w9aFUstxqwc34_A1y8_0qK8Jk');
+const unhhook = new Discord.WebhookClient(process.env.unhandled_rejection_webhook_id, process.env.command_webhook_token);
 
 async function startUp() {
 	// Handlers
