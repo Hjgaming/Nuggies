@@ -10,7 +10,7 @@ module.exports.run = async (client, message, args, utils) => {
 		.setTitle('Suggestion from ' + message.author.tag + ` [${message.author.id}]`)
 		.setDescription(suggestion)
 		.setFooter('if you want to suggest something, use ' + config.prefix + 'suggest <suggestion>');
-		message.channel.send('suggestion submitted. Join discord.gg/zzURhQGpRY to upvote your suggestion !');
+	message.channel.send('suggestion submitted. Join discord.gg/zzURhQGpRY to upvote your suggestion !');
 	e.send(embed).then(m => {
 		m.react('👍');
 		m.react('👎');

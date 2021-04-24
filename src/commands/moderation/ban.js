@@ -5,13 +5,12 @@ const config = require('../../../utils/config.json');
 module.exports.run = async (client, message, args, utils) => {
 	if(!message.guild.me.hasPermission('BAN_MEMBERS')) return message.reply('❌**Error:** I don\'t have the permission to do that! \n Please give me the `BAN MEMBERS ` permission !');
 	if (!message.member.hasPermission('BAN_MEMBERS')) return message.reply('❌**Error:** You don\'t have the permission to do that!');
-	let reason = args.slice(1).join(' ');
+	const reason = (args.slice(1).join(' ').length > 1 ? args.slice(1).join(' ') : 'No reason supplied.') + `\nModerator: ${message.author.tag} | ${message.author.id}`;
 	const user = message.mentions.users.first();
 	if (message.mentions.users.size < 1) return message.reply('You must mention someone to ban them.').catch(console.error);
 	if (message.mentions.users.first().id === message.author.id) return message.reply('I can\'t let you do that, I dont promote self-harm');
 	if (user.id === client.user.id) return message.reply('You dumbass, how will I ban myself ?');
 	if (message.mentions.users.first().id === '734006373343297557') return message.reply('You can\'t ban my Developer :wink:');
-	if (reason.length < 1) reason = 'No reason supplied.';
 	const botRolePossition = message.guild.member(client.user).roles.highest.position;
 	const rolePosition = message.guild.member(user).roles.highest.position;
 	const userRolePossition = message.member.roles.highest.position;
