@@ -66,7 +66,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 					.setTitle(`${cmd.help.name.slice(0, 1).toUpperCase()}${cmd.help.name.slice(1).toLowerCase()} Command!`)
 					.addField('``Description:``', cmd.help.description, true)
 					.addField('``Usage:``', cmd.help.usage, true)
-					.addField('``Aliases:``', cmd.help.aliases, true)
+					.addField('``Aliases:``', cmd.help.aliases.join(', ') ? '`' + cmd.help.aliases.join('`, `') + '`' : 'No aliases', true)
 					.addField('``Category``', cmd.config.category, true)
 					.addField('``Disabled``', cmd.config.disable ? 'Yes' : 'No', true)
 					.setColor('RANDOM');
