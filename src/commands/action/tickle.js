@@ -5,7 +5,7 @@ const superagent = require('superagent');
 module.exports.run = async (client, message, args, utils) => {
 	if (!message.mentions.users.first()) return message.reply('You need to mention someone to tickle them');
 
-	if(message.mentions.users.first().id === '734006373343297557') return message.reply('AssassiN got tickled so much, that he already died. R.I.P.');
+	if(message.mentions.users.first().id === '833713876628406363') return message.reply('AssassiN got tickled so much, that he already died. R.I.P.');
 
 	if (message.mentions.users.first().id == client.user.id) return message.reply('Nuuuuuuuuuuuuuuuuuuuuuu that tickless');
 
