@@ -13,7 +13,7 @@ Nuggies is a compact and easy to use multipurpose discord bot with loads of comm
 - [dbl](https://top.gg) (only do this if you have a bot on top.gg)
 - [bot token](https://discord.com/developers/applications) <br>
 3. get 4 webhooks for these purposes:
-- command loging
+- command logging
 - restart/ready logs
 - err logs
 - unhandled rejections logs
