@@ -46,7 +46,7 @@ module.exports.run = async (client, message, args, utils) => {
 
 
 module.exports.help = {
-	aliases: ['bam'],
+	aliases: [],
 	name: 'ban',
 	description: 'Ban a person from your server',
 	usage: config.prefix + 'ban @user',
