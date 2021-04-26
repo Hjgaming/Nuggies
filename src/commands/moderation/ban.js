@@ -10,7 +10,7 @@ module.exports.run = async (client, message, args, utils) => {
 	if (message.mentions.users.size < 1) return message.reply('You must mention someone to ban them.').catch(console.error);
 	if (message.mentions.users.first().id === message.author.id) return message.reply('I can\'t let you do that, I dont promote self-harm');
 	if (user.id === client.user.id) return message.reply('You dumbass, how will I ban myself ?');
-	if (message.mentions.users.first().id === '734006373343297557') return message.reply('You can\'t ban my Developer :wink:');
+	if (message.mentions.users.first().id === '833713876628406363') return message.reply('You can\'t ban my Developer :wink:');
 	const botRolePossition = message.guild.member(client.user).roles.highest.position;
 	const rolePosition = message.guild.member(user).roles.highest.position;
 	const userRolePossition = message.member.roles.highest.position;

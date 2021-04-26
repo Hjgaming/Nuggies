@@ -5,8 +5,8 @@ const config = require('../../../utils/config.json');
 
 module.exports.run = async (client, message, args, utils) => {
 	if (!message.mentions.users.first()) return message.reply('You need to mention someone to slap them');
-	if(message.mentions.users.first().id === '734006373343297557') return message.reply('You can\'t hurt him you dumbass.');
-	if (message.mentions.users.first().id == client.user.id && message.author.id === '734006373343297557') {
+	if(message.mentions.users.first().id === '833713876628406363') return message.reply('You can\'t hurt him you dumbass.');
+	if (message.mentions.users.first().id == client.user.id && message.author.id === '833713876628406363') {
 		const { body } = await superagent
 			.get('https://nekos.life/api/v2/img/slap');
 
@@ -17,7 +17,7 @@ module.exports.run = async (client, message, args, utils) => {
 			.setFooter('that hurts');
 		return message.channel.send({ embed });
 	}
-	else if (message.mentions.users.first().id == client.user.id && message.author.id !== '734006373343297557') {
+	else if (message.mentions.users.first().id == client.user.id && message.author.id !== '833713876628406363') {
 		return message.channel.send('NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU **owwie**');
 	}
 	const { body } = await superagent
