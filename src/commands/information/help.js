@@ -28,7 +28,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 				.setDescription('For more info about a specific command: use .help {command} \n[Invite Me!](https://discord.com/api/oauth2/authorize?client_id=779741162465525790&permissions=1609952759&scope=applications.commands%20bot) ・ [support server](https://https://discord.gg/zzURhQGpRY)')
 				.addField('<:slash:782701715479724063> Slash commands', `\`${prefix}help slash-commands\``, true)
 				.addField('<:bfdmoderator:807662459879817236> Moderation', `\`${prefix}help moderation\``, true)
-				.addField('<:information:807646586884063283> Info', `\`${prefix}help info\``, true)
+				.addField('<:information:807646586884063283> Info', `\`${prefix}help information\``, true)
 				.addField('<a:LX_Yay:807646869948727307> Fun', `\`${prefix}help fun\``, true)
 				.addField('<a:distraction:807647150438744064> Actions', `\`${prefix}help actions\``, true)
 				.addField('<a:Loading:785190101105508373> More', `\`${prefix}help more\``, true)
@@ -42,7 +42,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 		}
 		else {
 			const categoryArray = fs.readdirSync('src/commands');
-			const category = categoryArray.filter(x => x === args[0].toLowerCase()).join('');
+			const category = categoryArray.filter(x => x.toLowerCase() === args[0].toLowerCase()).join('');
 			if (category) {
 				const cmds = client.commands.filter(x => x.config.category.toLowerCase() === category.toLowerCase()).map(cmd => `\`${cmd.help.name}\``).join(', ');
 				const cmdsEmbed = new Discord.MessageEmbed()
