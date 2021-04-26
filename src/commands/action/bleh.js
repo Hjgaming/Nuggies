@@ -26,7 +26,7 @@ module.exports.help = {
 	aliases: [],
 	name: 'bleh',
 	description: 'bleh!',
-	usage: config.prefix + 'blush',
+	usage: config.prefix + 'bleh',
 };
 
 module.exports.config = {

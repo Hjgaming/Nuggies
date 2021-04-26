@@ -28,6 +28,6 @@ module.exports.help = {
 module.exports.config = {
 	args: false,
 	restricted: false,
-	category: 'More',
+	category: 'Misc',
 	cooldown: 0,
 };

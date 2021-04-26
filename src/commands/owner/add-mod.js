@@ -70,7 +70,7 @@ module.exports.help = {
 	aliases: ['a-m'],
 	name: 'add-mod',
 	description: 'Add a moderator to the permissions array',
-	usage: config.prefix + 'add-dev <id>',
+	usage: config.prefix + 'add-mod <id>',
 };
 
 module.exports.config = {

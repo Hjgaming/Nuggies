@@ -28,7 +28,7 @@ module.exports.help = {
 	aliases: [],
 	name: 'peek',
 	description: 'peek at someone !',
-	usage: config.prefix + 'love',
+	usage: config.prefix + 'peek',
 };
 
 module.exports.config = {
