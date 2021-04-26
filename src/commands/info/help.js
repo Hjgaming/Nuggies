@@ -31,7 +31,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 				.addField('<:information:807646586884063283> Info', `\`${prefix}help info\``, true)
 				.addField('<a:LX_Yay:807646869948727307> Fun', `\`${prefix}help fun\``, true)
 				.addField('<a:distraction:807647150438744064> Actions', `\`${prefix}help actions\``, true)
-				.addField('<a:Loading:785190101105508373> More', `\`${prefix}help more\``, true)
+				.addField('<a:Loading:785190101105508373> More', `\`${prefix}help misc\``, true)
 				.addField('⚙ Utility', `\`${prefix}help utility\``, true)
 				.addField('🎙 Soundboard', `\`${prefix}help soundboard\``, true)
 				//  .addField('<a:music_disc:826830791115931719>', `\`${prefix}help music\``, true)

@@ -90,7 +90,7 @@ module.exports = async (client, message) => {
 		try {
 			const basefetch = await fetch(`${chatbase}/chatbot?message=${encodeURIComponent(message.content)}&botname=${encodeURIComponent('Nuggies')}&ownername=${encodeURIComponent('AssassiN#1234')}&user=${message.author.id}`, {});
 			const response = await basefetch.json();
-			message.reply(response.message);
+			message.reply(response.message, { allowedMentions: { parse: [], users: [], roles: [], repliedUser: false } });
 		}
 		catch (e) {
 			message.reply('something went wrong! please report it on our support server discord.gg/d98jT3mgxf');
