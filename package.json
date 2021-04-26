@@ -29,8 +29,8 @@
     "num-parse": "^1.0.1",
     "one-liner-joke": "^1.2.0",
     "os-utils": "0.0.14",
-    "quickmongo": "^3.0.2",
     "path": "^0.12.7",
+    "quickmongo": "^3.0.2",
     "superagent": "^6.1.0",
     "urban": "^0.3.2"
   },
