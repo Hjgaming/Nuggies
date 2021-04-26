@@ -19,11 +19,10 @@ module.exports.run = async (client, message, args, utils) => {
 		// .addField('status', presence[member.presence.status], true)
 		.addField('ID 🆔', member.id, true)
 		.addField('Display Name 🤔', member.displayName, true)
-		.addField('Highest Role 🔝', member.roles.highest.name, true)
-		.addField('Roles 🕵️‍♀️', `<@&${member._roles.join('> <@&')}>`, false)
+		.addField('Highest Role 🔝', member.roles.highest, true)
+		.addField('Roles 🕵️‍♀️', `${member.roles.cache.sort((a, b) => b.position - a.position).map(role => role.toString()).join(' ').length > 1024 ? 'Too much to display' : member.roles.cache.sort((a, b) => b.position - a.position).map(role => role.toString()).join(' ')}`, false)
 		.addField('Joined On 🗓', member.joinedAt, true)
 		.addField('Created On 📅', ` ${(member.user.createdAt)}`, true);
-
 
 	message.channel.send(userEmbed);
 };
@@ -31,7 +30,7 @@ module.exports.run = async (client, message, args, utils) => {
 
 module.exports.help = {
 	aliases: [],
-	name: 'Information',
+	name: 'whois',
 	description: 'Get information about someone',
 	usage: config.prefix + 'whois <@537230099121045504>',
 };
@@ -39,7 +38,7 @@ module.exports.help = {
 module.exports.config = {
 	args: false,
 	restricted: false,
-	category: 'misc',
+	category: 'info',
 	disable: false,
 	cooldown: 1000,
 };

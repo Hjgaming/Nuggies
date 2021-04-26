@@ -5,7 +5,7 @@ const axios = require('axios');
 
 module.exports.run = async (client, message, args, utils) => {
 	const m = await message.channel.send('<a:loadingonline:787905402603438100> Trying to get a response from https://nuggies.tech/api/gay');
-	axios.get('https://nuggies.tech/api/gay')
+	axios.get('https://api.nuggetdev.com/api/gay')
 		.then(function(response) {
 			message.channel.send(JSON.stringify(response.data.gay, null, 2));
 			m.delete({ timeout: 5000 });
@@ -25,8 +25,7 @@ module.exports.help = {
 module.exports.config = {
 	args: false,
 	restricted: true,
-	category: 'Onwer',
+	category: 'Owner',
 	disable: false,
 	cooldown: 2000,
-
 };

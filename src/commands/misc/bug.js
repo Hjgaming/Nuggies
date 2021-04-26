@@ -18,7 +18,7 @@ module.exports.run = async (client, message, args, utils) => {
 
 
 module.exports.help = {
-	aliases: [],
+	aliases: ['report'],
 	name: 'bug',
 	description: 'submit a bug report !',
 	usage: config.prefix + 'bug kick command kicks the bot',
@@ -27,7 +27,7 @@ module.exports.help = {
 module.exports.config = {
 	args: false,
 	restricted: false,
-	category: 'More',
+	category: 'Misc',
 	disable: false,
 	cooldown: 0,
 };

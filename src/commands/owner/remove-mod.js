@@ -69,7 +69,7 @@ module.exports.help = {
 	aliases: ['r-m'],
 	name: 'remove-mod',
 	description: 'Remove a moderator from the permissions array',
-	usage: config.prefix + 'remove-dev <id>',
+	usage: config.prefix + 'remove-mod <id>',
 };
 
 module.exports.config = {

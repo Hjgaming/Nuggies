@@ -31,14 +31,14 @@ module.exports.run = async (client, message, args) => {
 module.exports.help = {
 	aliases: [],
 	name: 'docs',
-	description: 'search the discord.js docs',
+	description: 'Search the discord.js docs',
 	usage: config.prefix + 'docs message',
 };
 
 module.exports.config = {
 	args: true,
 	restricted: false,
-	category: 'category',
+	category: 'info',
 	disable: false,
 	cooldown: 1000,
 };
