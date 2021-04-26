@@ -21,7 +21,7 @@ module.exports.help = {
 	aliases: [],
 	name: 'bug',
 	description: 'submit a bug report !',
-	usage: config.prefix + '.bug kick command kicks the bot',
+	usage: config.prefix + 'bug kick command kicks the bot',
 };
 
 module.exports.config = {

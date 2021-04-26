@@ -17,7 +17,7 @@ module.exports.run = async (client, message, args, utils) => {
 		message.channel.createOverwrite(message.guild.id, {
 			SEND_MESSAGES: null,
 		}).then(() => {
-			message.channel.send('channel unlocked');
+			message.channel.send('Channel unlocked');
 			clearTimeout(client.lockit[message.channel.id]);
 			delete client.lockit[message.channel.id];
 		}).catch(error => {
@@ -33,7 +33,7 @@ module.exports.run = async (client, message, args, utils) => {
 				client.lockit[message.channel.id] = setTimeout(() => {
 					message.channel.createOverwrite(message.guild.id, {
 						SEND_MESSAGES: null,
-					}).then(message.channel.send('channel unlocked :wink:')).catch(console.error);
+					}).then(message.channel.send('Channel unlocked :wink:')).catch(console.error);
 					delete client.lockit[message.channel.id];
 				}, ms(time));
 
