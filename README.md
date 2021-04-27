@@ -6,7 +6,7 @@ You can invite Nuggies by clicking [here](https://top.gg/bot/779741162465525790/
 # How To Run The Bot? <img src = "https://cdn.discordapp.com/emojis/835527258957152287.png?v=1" width = "40">
 
 1. Clone the repository
-```powershell
+```cmd
 git clone https://github.com/Nuggies-bot/Nuggies
 (or)
 gh repo clone Nuggies-bot/Nuggies
@@ -28,7 +28,7 @@ gh repo clone Nuggies-bot/Nuggies
 
 4. Paste the tokens and webhooks ids and tokens into the `.env`. Check out <a href = "https://github.com/Nuggies-bot/Nuggies/blob/main/.env.example"> `.example.env` </a> for more! <br><br>
 5. After doing the above, run the following commands on the command line :
-```powershell
+```cmd
 npm install
 node index.js
 ```
