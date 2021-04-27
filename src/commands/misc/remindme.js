@@ -4,11 +4,13 @@ const config = require('../../../utils/config.json');
 const ms = require('ms');
 
 module.exports.run = async (client, message, args, utils) => {
+	if(!args[0]) return message.reply('You can use `add` to add a reminder, `delete` to delete any existing reminders and `list` to view all of your reminders!', { allowedMentions: { repliedUser: false } });
 	if (args[0].toLowerCase() === 'add') {
 		if (!args[1]) return message.reply('Provide me time bro', { allowedMentions: { parse: [], users: [], roles: [], repliedUser: false } });
 		if (!ms(args[1])) return message.reply('Provide valid time bro, should be like `10s`', { allowedMentions: { parse: [], users: [], roles: [], repliedUser: false } });
-		if (ms(args[0]) <= 5) return message.reply('Just remember it yourself bro', { allowedMentions: { parse: [], users: [], roles: [], repliedUser: false } });
+		if (ms(args[1]) <= 5000) return message.reply('Just remember it yourself bro', { allowedMentions: { parse: [], users: [], roles: [], repliedUser: false } });
 		if(ms(args[1]) > 1209600000) return message.reply(`You have exceeded the maximum amount of time of ${ms(1209600000, { long: true })}!`);
+		if(!args[2]) return message.reply('You need to provide me what to remind you bro', { allowedMentions: { repliedUser: false } });
 		const time = Date.now();
 		client.reminders.set(client.reminders.size + 1, {
 			author: message.author.id,
