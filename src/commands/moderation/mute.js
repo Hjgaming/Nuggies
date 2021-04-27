@@ -42,7 +42,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 		}
 	}
 
-	const member = message.mentions.members.first();
+	const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 	if (!member) {return message.channel.send('Please mention a user or provide a valid user ID');}
 
 	if (member === message.member) {return message.channel.send('You cannot mute yourself');}
