@@ -8,7 +8,7 @@ module.exports.run = async (client, message, args, utils) => {
 			const gifurl = response.data.url;
 			const embed = new Discord.MessageEmbed()
 				.setTitle(`${message.author.username}, here is your monke pic !`)
-				.setFooter('🐵🐒 api by https://monke.vip')
+				.setFooter('🐵🐒 api by https://monkedev.com')
 				.setColor('RANDOM')
 				.setImage(gifurl);
 			message.channel.send(embed);
@@ -21,8 +21,8 @@ module.exports.run = async (client, message, args, utils) => {
 module.exports.help = {
 	aliases: ['monkey'],
 	name: 'monke',
-	description: 'Wanna see some meme? Just use the command',
-	usage: config.prefix + 'meme',
+	description: 'Monkeeeeeeeeeeee',
+	usage: config.prefix + 'monke',
 };
 
 module.exports.config = {

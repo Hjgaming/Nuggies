@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
-const config = require('../../../utils/config.json')
+const config = require('../../../utils/config.json');
 module.exports.run = async (client, message, args) => {
 	const searchQuery = args.slice().join(' ');
 	const url = `https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(searchQuery)}`;
@@ -31,14 +31,14 @@ module.exports.run = async (client, message, args) => {
 module.exports.help = {
 	aliases: [],
 	name: 'docs',
-	description: 'search the discord.js docs',
+	description: 'Search the discord.js docs',
 	usage: config.prefix + 'docs message',
 };
 
 module.exports.config = {
 	args: true,
 	restricted: false,
-	category: 'category',
+	category: 'info',
 	disable: false,
 	cooldown: 1000,
 };

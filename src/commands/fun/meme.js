@@ -4,7 +4,7 @@ const axios = require('axios');
 const config = require('../../../utils/config.json');
 
 module.exports.run = async (client, message, args, utils) => {
-	axios.get('https://api.nuggies.tech/api/meme')
+	axios.get('https://api.nuggetdev.com/api/meme')
 		.then(function(response) {
 			const embed = new Discord.MessageEmbed()
 				.setTitle(`${response.data.title}`)
