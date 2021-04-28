@@ -7,4 +7,8 @@ assignees: ''
 
 ---
 
-
+# Requirements
+- [] Is the issue related to this repository
+- [] Have you done all the steps given [here](https://github.com/Nuggies-bot/Nuggies#readme)
+# Description
+Describe the problem faced
