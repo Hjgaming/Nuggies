@@ -1,4 +1,5 @@
 const { Client, Collection } = require('discord.js');
+const EventHandler = require('../src/handler/event/eventHandler');
 
 class Nuggies extends Client {
 	constructor(options) {
@@ -14,12 +15,15 @@ class Nuggies extends Client {
 		this.data = require('../functions/mongo');
 		this.reminders = new Collection();
 		this.soundboardqueue = new Collection();
+
+		// Handlers
+		this.eventHandler = new EventHandler(this);
 	}
 
 	/**
-     * @param {String} token Bot's Token
-     * @param {String} mongoDB Your monogDB URL
-     */
+	 * @param {String} token Bot's Token
+	 * @param {String} mongoDB Your monogDB URL
+	 */
 	start(token, mongoDB) {
 		require('./startUp')(this);
 

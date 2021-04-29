@@ -9,18 +9,8 @@ const ascii = require('ascii-table');
 async function startUp(client) {
 	// Handlers
 
-	// load all events
-	const eventtable = new ascii('Event\'s');
-	eventtable.setHeading('Event', 'Load status');
-	const eventFiles = fs.readdirSync('./src/events/').filter((file) => file.endsWith('.js'));
-	console.log(`Loading a total of ${eventFiles.length} events.`);
-	for (const file of eventFiles) {
-		const event = require(`../src/events/${file}`);
-		const eventName = file.split('.')[0];
-		eventtable.addRow(eventName, '✔');
-		client.on(eventName, event.bind(null, client));
-	}
-	console.log(eventtable.toString());
+	// load all events - Moved to eventHandler.js
+
 	// iya's command loader
 	const tble = new ascii('Commands');
 	tble.setHeading('Command', 'Load status');
