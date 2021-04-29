@@ -1,5 +1,5 @@
 ---
-name: Help
+name: "\U0001F469‍\U0001F393 Help"
 about: Get help related to this repositories
 title: ''
 labels: help wanted, question
