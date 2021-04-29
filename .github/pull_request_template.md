@@ -11,4 +11,4 @@ _Give extra details to describe the changes_
 [Issue Name](provide-link-to-related-issue-if-any)
 
 # Checks
-- [] Does the bot work fine?
+- [ ] Does the bot work fine?
