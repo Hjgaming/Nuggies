@@ -4,7 +4,7 @@ const fs = require('fs');
 const util = require('util');
 const readdir = util.promisify(fs.readdir);
 const ascii = require('ascii-table');
-const DBL = require('dblapi.js');
+// const DBL = require('dblapi.js');
 
 async function startUp(client) {
 	// Handlers
@@ -42,7 +42,7 @@ async function startUp(client) {
 
 	console.log(tble.toString());
 	// only if you have a bot on top.gg
-	const dbl = new DBL(process.env.dbl, client);
+	// const dbl = new DBL(process.env.dbl, client);
 
 	// Login moved to the class!
 }
