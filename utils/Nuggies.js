@@ -13,6 +13,7 @@ class Nuggies extends Client {
 		this.esnipes = new Collection();
 		this.data = require('../functions/mongo');
 		this.reminders = new Collection();
+		this.soundboardqueue = new Collection();
 	}
 
 	/**
