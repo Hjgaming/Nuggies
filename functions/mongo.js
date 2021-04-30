@@ -6,7 +6,7 @@ const cachegoose = new GooseCache(mongoose, {
 mongoose.set('useFindAndModify', false);
 const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
-
+const disableDB = require('../models/disableSchema');
 module.exports = {
 	/**
      * @param {string} uri - Mongo Connection URI
@@ -434,5 +434,70 @@ module.exports = {
 			cachegoose.clearCache();
 			return { user };
 		});
+	},
+	async adddisable(id, name, type) {
+		if(!name) throw new Error('name not provided!');
+		if(!type) throw new Error('type not provided!');
+		if(!id) throw new Error('id not provided!');
+
+		if(type === 'category') {
+			const db = await disableDB.findOne({ guildID: id });
+			if(!db) {
+				const newdoc = await new disableDB({ guildID: id });
+				await newdoc.save().catch(error => console.log(error));
+			}
+			await db.category.push(name);
+			await db.save().catch(e => console.log(e));
+		}
+		if(type === 'command') {
+			const db = await disableDB.findOne({ guildID: id });
+			if(!db) {
+				const newdoc = await new disableDB({ guildID: id });
+				await newdoc.save().catch(error => console.log(error));
+			}
+			await db.commands.push(name);
+			await db.save().catch(e => console.log(e));
+		}
+		cachegoose.clearCache();
+		return { name };
+	},
+
+	async removedisable(id, name, type) {
+		if(!id) throw new Error('id not provided');
+		if(!name) throw new Error('name not provided');
+		if(!type) throw new Error('type not provided');
+		if(type === 'category') {
+			const db = await disableDB.findOne({ guildID: id });
+			if(!db) {
+				throw new Error('its not disabled.');
+			}
+			const index = db.category.indexOf(name);
+			await db.category.splice(index, 1);
+		}
+		if(type === 'command') {
+			const db = await disableDB.findOne({ guildID: id });
+			if(!db) {
+				throw new Error('its not disabled.');
+			}
+			const index = db.commands.indexOf(name);
+			await db.commands.splice(index, 1);
+		}
+		cachegoose.clearCache();
+		return { name };
+	},
+	async checkdisable(command, type, id) {
+		if(!id) throw new Error('id not provided');
+		if(!command) throw new Error('command not provided');
+		if(!type) throw new Error('type not provided');
+		const data = await disableDB.findOne({ guildID: id });
+		if(!data) return false;
+		if(type === 'command') {
+			if(data.commands.includes(command)) return true;
+			else return false;
+		}
+		if(type === 'category') {
+			if(data.category.includes(command)) return true;
+			else return false;
+		}
 	},
 };
