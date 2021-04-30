@@ -469,21 +469,23 @@ module.exports = {
 		if(type === 'category') {
 			const db = await disableDB.findOne({ guildID: id });
 			if(!db) {
-				throw new Error('its not disabled.');
+				return false;
 			}
-			const index = db.category.indexOf(name);
+			const index = db.category.indexOf(name.toLowerCase());
 			await db.category.splice(index, 1);
+			await db.save().catch(e => console.log(e));
 		}
 		if(type === 'command') {
 			const db = await disableDB.findOne({ guildID: id });
 			if(!db) {
-				throw new Error('its not disabled.');
+				return false;
 			}
 			const index = db.commands.indexOf(name);
 			await db.commands.splice(index, 1);
+			await db.save().catch(e => console.log(e));
 		}
 		cachegoose.clearCache();
-		return { name };
+		return true;
 	},
 	async checkdisable(command, type, id) {
 		if(!id) throw new Error('id not provided');
