@@ -134,9 +134,7 @@ module.exports = async (client, message) => {
 	if (!commandFile) return;
 	const commandcheck = await client.data.checkdisable(command, 'command', message.guild.id);
 	const categorycheck = await client.data.checkdisable(category, 'category', message.guild.id);
-	// console.log(commandcheck);
-	console.log(categorycheck);
-	console.log(category);
+
 	if(commandcheck == true) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`This command is disabled in **${message.guild.name}**`).setColor('RED'));
 	if(categorycheck == true) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
 	// if(client.commands.get(command).config.category === 'Actions') return message.channel.send('due to some difficulties, Actions commands are disabled for atleast a day, please join discord.gg/d98jT3mgxf for updates (we also do premium giveaways)');
@@ -205,6 +203,7 @@ module.exports = async (client, message) => {
 				const errEmbed = new Discord.MessageEmbed().setTitle(`Command error in ${message.guild.name}`).addField('Additional Details', `**Guild ID :** ${message.guild.id}\n**Author :** ${message.author.tag}(${message.author.id})\n**Command :** ${commandFile.help.name}\n**Content :** ${message.content}`, false).setDescription(`**Error:**\n\`\`\`js\n${error}\n\`\`\``).setTimestamp();
 				errhook.send(errEmbed);
 			}
+			console.log(error);
 			return message.channel.send(new Discord.MessageEmbed().setTitle('Something went wrong!').setDescription('please report it in our [support server](https://discord.gg/ut7PxgNdef)').setColor('RED'));
 		}
 	}
