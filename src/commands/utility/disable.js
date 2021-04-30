@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const disableDB = require('../../../models/disableSchema');
 module.exports.run = async (client, message, args, utils, data) => {
+	if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You need the ``manage server`` permission to run this command !');
 	const type = args[0];
 	if(!type || !args[1]) return message.channel.send(new Discord.MessageEmbed().setTitle('Insufficient arguments provided!').setDescription('Please provide all of these arguments: \n \n .disable (type<category/command>) (name<category/command>)').setColor('RED').setFooter('for ex: .disable command help'));
 	if(type.toLowerCase() === 'command') {
