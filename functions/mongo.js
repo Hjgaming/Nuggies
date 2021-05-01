@@ -6,7 +6,6 @@ const cachegoose = new GooseCache(mongoose, {
 mongoose.set('useFindAndModify', false);
 const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
-const disableDB = require('../models/disableSchema');
 module.exports = {
 	/**
      * @param {string} uri - Mongo Connection URI
@@ -35,6 +34,8 @@ module.exports = {
 				automeme_channel,
 				mute_role,
 				premium,
+				category,
+				commands,
 			} = newG;
 			await newG.save().catch(error => console.log(error));
 			return {
@@ -46,6 +47,8 @@ module.exports = {
 				automeme_channel,
 				mute_role,
 				premium,
+				category,
+				commands,
 			};
 		}
 		else {
@@ -57,6 +60,8 @@ module.exports = {
 			const automeme_channel = guild.automeme_channel;
 			const mute_role = guild.mute_role;
 			const premium = guild.premium;
+			const category = guild.category;
+			const commands = guild.commands;
 			return {
 				prefix,
 				registeredAt,
@@ -66,6 +71,8 @@ module.exports = {
 				automeme_channel,
 				mute_role,
 				premium,
+				category,
+				commands,
 			};
 		}
 	},
@@ -441,18 +448,18 @@ module.exports = {
 		if(!id) throw new Error('id not provided!');
 
 		if(type === 'category') {
-			const db = await disableDB.findOne({ guildID: id });
+			const db = await guildsDB.findOne({ id: id });
 			if(!db) {
-				const newdoc = await new disableDB({ guildID: id });
+				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
 			}
 			await db.category.push(name);
 			await db.save().catch(e => console.log(e));
 		}
 		if(type === 'command') {
-			const db = await disableDB.findOne({ guildID: id });
+			const db = await guildsDB.findOne({ id: id });
 			if(!db) {
-				const newdoc = await new disableDB({ guildID: id });
+				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
 			}
 			await db.commands.push(name);
@@ -467,7 +474,7 @@ module.exports = {
 		if(!name) throw new Error('name not provided');
 		if(!type) throw new Error('type not provided');
 		if(type === 'category') {
-			const db = await disableDB.findOne({ guildID: id });
+			const db = await guildsDB.findOne({ id: id });
 			if(!db) {
 				return false;
 			}
@@ -476,7 +483,7 @@ module.exports = {
 			await db.save().catch(e => console.log(e));
 		}
 		if(type === 'command') {
-			const db = await disableDB.findOne({ guildID: id });
+			const db = await guildsDB.findOne({ id: id });
 			if(!db) {
 				return false;
 			}
@@ -488,18 +495,19 @@ module.exports = {
 		return true;
 	},
 	async checkdisable(command, type, id) {
+		let e = false;
 		if(!id) throw new Error('id not provided');
 		if(!command) throw new Error('command not provided');
 		if(!type) throw new Error('type not provided');
-		const data = await disableDB.findOne({ guildID: id });
-		if(!data) return false;
+		const data = await guildsDB.findOne({ id: id });
+		if(!data) e = false;
 		if(type === 'command') {
-			if(data.commands.includes(command)) return true;
-			else return false;
+			if(data.commands.includes(command)) e = true;
 		}
 		if(type === 'category') {
-			if(data.category.includes(command)) return true;
-			else return false;
+			if(data.category.includes(command)) e = true;
 		}
+		cachegoose.clearCache();
+		return e;
 	},
 };
