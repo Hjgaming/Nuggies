@@ -129,9 +129,9 @@ module.exports = async (client, message) => {
 		command = client.commands.get(client.aliases.get(command)).help.name;
 	}
 
+	if (!commandFile) return;
 	const commandFile = client.commands.get(command);
 	const category = client.commands.get(command).config.category.toLowerCase();
-	if (!commandFile) return;
 	if(data.guild.category.length) {
 		if(data.guild.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
 	}
