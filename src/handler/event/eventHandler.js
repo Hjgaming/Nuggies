@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const Nuggies = require('../../../utils/Nuggies');
 const fs = require('fs');
 const ascii = require('ascii-table');

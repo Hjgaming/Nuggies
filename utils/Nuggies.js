@@ -1,5 +1,7 @@
 const { Client, Collection } = require('discord.js');
+const CommandHandler = require('../src/handler/command/commandHandler');
 const EventHandler = require('../src/handler/event/eventHandler');
+const { prefix } = require('./config.json');
 
 class Nuggies extends Client {
 	constructor(options) {
@@ -18,6 +20,7 @@ class Nuggies extends Client {
 
 		// Handlers
 		this.eventHandler = new EventHandler(this);
+		this.commandHandler = new CommandHandler(this, { prefix });
 	}
 
 	/**
