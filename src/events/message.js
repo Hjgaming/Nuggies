@@ -132,11 +132,12 @@ module.exports = async (client, message) => {
 	const commandFile = client.commands.get(command);
 	const category = client.commands.get(command).config.category.toLowerCase();
 	if (!commandFile) return;
-	const commandcheck = await client.data.checkdisable(command, 'command', message.guild.id);
-	const categorycheck = await client.data.checkdisable(category, 'category', message.guild.id);
-
-	if(commandcheck == true) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`This command is disabled in **${message.guild.name}**`).setColor('RED'));
-	if(categorycheck == true) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
+	if(data.guild.category.length) {
+		if(data.guild.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
+	}
+	if(data.guild.length) {
+		if(data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
+	}
 	// if(client.commands.get(command).config.category === 'Actions') return message.channel.send('due to some difficulties, Actions commands are disabled for atleast a day, please join discord.gg/d98jT3mgxf for updates (we also do premium giveaways)');
 	if (client.commands.get(command).config.developers == true) {
 		if (data.user.developer == false) {

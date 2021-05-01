@@ -493,21 +493,6 @@ module.exports = {
 		}
 		cachegoose.clearCache();
 		return true;
-	},
-	async checkdisable(command, type, id) {
-		let e = false;
-		if(!id) throw new Error('id not provided');
-		if(!command) throw new Error('command not provided');
-		if(!type) throw new Error('type not provided');
-		const data = await guildsDB.findOne({ id: id });
-		if(!data) e = false;
-		if(type === 'command') {
-			if(data.commands.includes(command)) e = true;
-		}
-		if(type === 'category') {
-			if(data.category.includes(command)) e = true;
-		}
-		cachegoose.clearCache();
-		return e;
+
 	},
 };
