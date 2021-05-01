@@ -37,5 +37,5 @@ module.exports.config = {
 	args: false,
 	restricted: false,
 	category: 'Utility',
-	disable: false,
+	disable: true,
 };
