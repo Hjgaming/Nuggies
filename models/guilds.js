@@ -36,6 +36,14 @@ const guildsDB = new Schema({
 		type: Boolean,
 		default: false,
 	},
+	category: {
+		type: Array,
+		default: [],
+	},
+	commands: {
+		type: Array,
+		default: [],
+	},
 
 });
 
