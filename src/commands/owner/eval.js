@@ -7,7 +7,7 @@ function clean(text) {
 module.exports.run = async (client, message, args, utils, data) => {
 	args = args.join(' ');
 	try {
-		let evaled = eval("(async () => {" + args + "})()")
+		let evaled = eval('(async () => {' + args + '})()');
 		if (typeof evaled !== 'string') {evaled = require('util').inspect(evaled);}
 		message.channel.send(`\`\`\`xl\n${clean(evaled)}\n\`\`\``);
 	}
