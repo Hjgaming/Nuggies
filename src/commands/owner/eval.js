@@ -6,8 +6,8 @@ function clean(text) {
 
 module.exports.run = async (client, message, args, utils, data) => {
 	const code = args.join(' ');
-        const hasAwait = code.includes("await"),
-        const hasReturn = code.includes("return"),
+        const hasAwait = code.includes("await");
+        const hasReturn = code.includes("return");
 	try {
 		let evaled = hasAwait ? await eval(`(async () => { ${hasReturn ? " " : "return"} ${code} })()`) : eval(code);
 		if (typeof evaled !== "string") { 
