@@ -28,7 +28,6 @@ class Nuggies extends Client {
 	 * @param {String} mongoDB Your monogDB URL
 	 */
 	start(token, mongoDB) {
-		require('./startUp')(this);
 
 		this.data.connect(mongoDB)
 			.then(() => {

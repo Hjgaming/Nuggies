@@ -4,9 +4,14 @@ const Discord = require('discord.js');
 const automeme = require('../../models/guilds');
 const config = require('../../utils/config.json');
 const axios = require('axios');
+const Cache = require('../../functions/cache');
 module.exports = async (client) => {
 	console.log(`${client.user.username} is now online!`);
 	client.user.setActivity('bot.nuggetdev.com/premium', { type: 'WATCHING', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' });
+
+	// Cache
+	client.cache = new Cache(5 * 1000);
+
 	if (client.user.id !== '779741162465525790') return;
 	const Webhook = new Discord.WebhookClient(process.env.ready_webhook_id, process.env.ready_webhook_token);
 	Webhook.send(new Discord.MessageEmbed().setTitle('Nuggies was restarted!').setDescription('Nuggies just got restarted!').setColor('e03854').setTimestamp());
