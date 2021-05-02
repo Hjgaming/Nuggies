@@ -22,7 +22,7 @@ module.exports = {
      */
 	async getGuildDB(guildID) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
-		const guild = await guildsDB.findOne({ id: guildID }).cache(60);
+		const guild = await guildsDB.findOne({ id: guildID }).lean().cache(120);
 		if (!guild) {
 			const newG = new guildsDB({ id: guildID });
 			const {
@@ -81,7 +81,7 @@ module.exports = {
    */
 	async getUserDB(userID) {
 		if (!userID) throw new Error('Please Provide a User ID');
-		const user = await usersDB.findOne({ id: userID }).cache(60);
+		const user = await usersDB.findOne({ id: userID }).lean().cache(120);
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator } = newUs;
