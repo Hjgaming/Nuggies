@@ -7,6 +7,7 @@ class Cache {
 	 */
 	constructor(time) {
 		this.time = time || null;
+		this.cache();
 		if (this.time) {
 			this.request(this.time);
 		}
@@ -17,7 +18,8 @@ class Cache {
 		schemas.forEach((file) => {
 			const schema = require(`../models/${file}`);
 			schema.find()
-				.then(data => this[file.split('.')[0]] = data);
+				.then(data => this[file.split('.')[0]] = data)
+				.catch(err => console.log('Unable to cache data:\n' + err));
 		});
 	}
 

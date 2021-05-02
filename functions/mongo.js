@@ -152,10 +152,10 @@ module.exports = class MongoDB {
 	}
 
 	/**
-* @param {string} userID - ID of the User
-* @param {string} toggle - blacklist toggle
-* @param {string} reason - blacklisted reason
-*/
+	* @param {string} userID - ID of the User
+	* @param {string} toggle - blacklist toggle
+	* @param {string} reason - blacklisted reason
+	*/
 	async blacklist(userID, toggle, reason) {
 		if (!userID) throw new Error('Please Provide a User ID');
 		if (!toggle) throw new Error('Please Provide a toggle');
