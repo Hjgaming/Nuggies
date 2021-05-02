@@ -14,7 +14,7 @@ class Nuggies extends Client {
 		this.events = new Collection();
 		this.snipes = new Collection();
 		this.esnipes = new Collection();
-		this.data = require('../functions/mongo');
+		this.data = new (require('../functions/mongo'))(this);
 		this.reminders = new Collection();
 		this.soundboardqueue = new Collection();
 
