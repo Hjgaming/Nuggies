@@ -5,10 +5,10 @@ function clean(text) {
 }
 
 module.exports.run = async (client, message, args, utils, data) => {
-	args = args.join(' ');
+	const code = args.join(' ');
 	try {
-		let evaled = eval('(async () => {' + args + '})()');
-		if (typeof evaled !== 'string') {evaled = require('util').inspect(evaled);}
+		let evaled = eval(`(async () => { ${code} })()`);
+		if (typeof evaled !== "string") evaled = require("util").inspect(evaled, { depth: 0 });
 		message.channel.send(`\`\`\`xl\n${clean(evaled)}\n\`\`\``);
 	}
 	catch (err) {
