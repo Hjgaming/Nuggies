@@ -120,6 +120,7 @@ module.exports = class MongoDB {
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			return { reason };
 		}
 		else {
@@ -140,6 +141,7 @@ module.exports = class MongoDB {
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			return { userID };
 		}
 		else {
@@ -172,6 +174,7 @@ module.exports = class MongoDB {
 				user.blacklisted_reason = null;
 			}
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			cachegoose.clearCache();
 			return { reason };
 		}
@@ -211,6 +214,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { prefix };
 		}
 		guild.prefix = prefix;
@@ -236,6 +240,7 @@ module.exports = class MongoDB {
 				user.developer = false;
 			}
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -269,6 +274,7 @@ module.exports = class MongoDB {
 				user.moderator = false;
 			}
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -296,6 +302,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -317,6 +324,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { channel };
 		}
 		guild.chatbot_channel = channel;
@@ -336,6 +344,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -357,6 +366,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { channel };
 		}
 		guild.automeme_channel = channel;
@@ -376,6 +386,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { role };
 		}
 		guild.mute_role = role;
@@ -395,6 +406,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -416,6 +428,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { role };
 		}
 		guild.afk_role = role;
@@ -435,6 +448,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		guild.premium = toggle;
@@ -475,6 +489,7 @@ module.exports = class MongoDB {
 			if (!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
+				this.client.cache.guilds.push(newdoc);
 			}
 			await db.category.push(name);
 			await db.save().catch(e => console.log(e));
@@ -484,6 +499,7 @@ module.exports = class MongoDB {
 			if (!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
+				this.client.cache.guilds.push(newdoc);
 			}
 			await db.commands.push(name);
 			await db.save().catch(e => console.log(e));

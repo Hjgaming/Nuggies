@@ -1,12 +1,9 @@
 //                                               -- All our requirements --
 
 const Discord = require('discord.js');
-const utils = require('../../utils/utils');
 const config = require('../../utils/config.json');
 const chatbase = 'https://api.affiliateplus.xyz/api';
 const fetch = require('node-fetch');
-const cmdhook = new Discord.WebhookClient(process.env.command_webhook_id, process.env.command_webhook_token);
-const errhook = new Discord.WebhookClient(process.env.err_webhook_id, process.env.err_webhook_token);
 
 module.exports = async (client, message) => {
 	//                                               -- Message Event Function --
@@ -125,97 +122,5 @@ module.exports = async (client, message) => {
 	// Basic command checks and argument definitions
 
 	// If not cached return
-	if (!client.cache.guilds) return;
 
-	const prefixMention = new RegExp(`^<@!?${client.user.id}> `);
-	const prefix = message.content.match(prefixMention) ? message.content.match(prefixMention)[0] : prefixx;
-
-	if (!message.content.startsWith(prefix)) return;
-
-	const args = message.content.slice(prefix.length).trim().split(/ +/g);
-	let command = args.shift().toLowerCase();
-
-	// Command Handler Dynamic Checks
-
-	if (client.aliases.has(command)) {
-		command = client.commands.get(client.aliases.get(command)).help.name;
-	}
-
-	const commandFile = client.commands.get(command);
-	if (!commandFile) return;
-	const category = client.commands.get(command).config.category.toLowerCase();
-	if (data.guild.category.length) {
-		if (data.guild.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
-	}
-	if (data.guild.length) {
-		if (data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
-	}
-	// if(client.commands.get(command).config.category === 'Actions') return message.channel.send('due to some difficulties, Actions commands are disabled for atleast a day, please join discord.gg/d98jT3mgxf for updates (we also do premium giveaways)');
-	if (commandFile.config.developers == true) {
-		if (data.user.developer == false) {
-			return utils.errorEmbed(message, ':warning: This command is restricted only to bot owners.');
-		}
-	}
-
-	if (commandFile.config.restricted == true) {
-		if (data.user.moderator == false) {
-			return utils.errorEmbed(message, ':warning: This command is restricted only to bot moderators / owners.');
-		}
-	}
-
-	if (commandFile.config.disable == true) {
-		return utils.errorEmbed(message, ':warning: This command is disabled for a short period of time! :warning:');
-	}
-
-	if (commandFile.config.args == true) {
-		if (!args[0]) {
-			return utils.errorEmbed(message, `Invalid arguments. Use: ${prefix + 'help ' + client.commands.get(command).help.name}`);
-		}
-	}
-
-	// Core Command Handler and Cooldown Checks
-
-	const cooldown = client.commands.get(command).config.cooldown;
-	const pcooldown = client.commands.get(command).config.cooldown / 2;
-
-	const timestamps = client.cooldowns.get(command);
-	if (timestamps.has(message.author.id)) {
-		if (data.user.premium == true) {
-			const expirationTime = timestamps.get(message.author.id) + pcooldown;
-			if (Date.now() < expirationTime) {
-				const timeLeft = utils.timer(expirationTime);
-				return message.channel.send(new Discord.MessageEmbed().setTitle(`${message.author.username}, ⏰ Hold up!`).setDescription(`This command is on cooldown for **${timeLeft}** \n \n the default cooldown for this command is **\`${utils.timer(cooldown + Date.now())}\`** but since you are a [donator](https://bot.nuggetdev.com/premium), you only need to wait for **\`${utils.timer(pcooldown + Date.now())}!\`**`).setColor('RED'));
-			}
-		}
-		else {
-			const expirationTime = timestamps.get(message.author.id) + cooldown;
-			if (Date.now() < expirationTime) {
-				const timeLeft = utils.timer(expirationTime);
-				return message.channel.send(new Discord.MessageEmbed().setTitle(`${message.author.username}, ⏰ Hold up!`).setDescription(`This command is on cooldown for **${timeLeft}** \n \n the default cooldown for this command is **\`${utils.timer(cooldown + Date.now())}\`** but for [__**donators**__](https://bot.nuggetdev.com/premium), its only **\`${utils.timer(pcooldown + Date.now())}\` !**`).setColor('RED'));
-			}
-		}
-	}
-
-	// Command Logs
-
-	try {
-		if (client.user.id === '779741162465525790') {
-			if (!command) return;
-			const m = new Discord.MessageEmbed().setTitle(`Command used in ${message.guild.name}`).setColor('RANDOM').addField('User:', `${message.author.tag}`).addField('User ID:', `${message.author.id}`).addField('Command:', `${command}`).addField('Message Content:', `${message.content}`).addField('Guild ID:', `${message.guild.id}`);
-			await cmdhook.send(m);
-		}
-		await timestamps.set(message.author.id, Date.now());
-		setTimeout(
-			async () => await timestamps.delete(message.author.id), cooldown);
-		await commandFile.run(client, message, args, utils, data);
-	}
-	catch (error) {
-		// Command Errors
-		if (client.user.id === '779741162465525790') {
-			const errEmbed = new Discord.MessageEmbed().setTitle(`Command error in ${message.guild.name}`).addField('Additional Details', `**Guild ID :** ${message.guild.id}\n**Author :** ${message.author.tag}(${message.author.id})\n**Command :** ${commandFile.help.name}\n**Content :** ${message.content}`, false).setDescription(`**Error:**\n\`\`\`js\n${error}\n\`\`\``).setTimestamp();
-			errhook.send(errEmbed);
-		}
-		console.log(error);
-		return message.channel.send(new Discord.MessageEmbed().setTitle('Something went wrong!').setDescription('please report it in our [support server](https://discord.gg/ut7PxgNdef)').setColor('RED'));
-	}
 };

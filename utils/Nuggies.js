@@ -5,6 +5,11 @@ const { prefix } = require('./config.json');
 const Cache = require('../functions/cache');
 
 class Nuggies extends Client {
+
+	/**
+	 * @param {Client.options} options
+	 */
+
 	constructor(options) {
 		super(options);
 
@@ -31,8 +36,8 @@ class Nuggies extends Client {
 	 * @param {String} token Bot's Token
 	 * @param {String} mongoDB Your monogDB URL
 	 */
-	start(token, mongoDB) {
 
+	start(token, mongoDB) {
 		this.data.connect(mongoDB)
 			.then(() => {
 				// If it connects log the following
