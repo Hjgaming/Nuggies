@@ -37,12 +37,10 @@ module.exports = async (client, message) => {
 	data.guild = guildDB;
 	data.user = userDB;
 
-	// check if user is blacklisted
-
+	// Blacklist check
 	if (data.user) if (data.user.blacklisted) return;
 
 	// AFK thingy
-
 	if (userDB) {
 		if (userDB.is_afk) {
 			await client.data.removeAfk(message.author.id);
@@ -67,7 +65,6 @@ module.exports = async (client, message) => {
 	});
 
 	// Chatbot thingy
-
 	if (data) {
 		if (data.guild) {
 			if (data.guild.chatbot_enabled && data.guild.chatbot_channel == message.channel.id) {
@@ -119,8 +116,5 @@ module.exports = async (client, message) => {
 			.setColor('RANDOM');
 		message.channel.send(m);
 	}
-	// Basic command checks and argument definitions
-
-	// If not cached return
-
+	// Command handler moved to /src/handler/command/commandHandler.js
 };

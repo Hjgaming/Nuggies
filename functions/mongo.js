@@ -43,6 +43,7 @@ module.exports = class MongoDB {
 				commands,
 			} = newG;
 			await newG.save().catch(error => console.log(error));
+			this.client.cache.users.push(newG);
 			return {
 				prefix,
 				registeredAt,
@@ -92,6 +93,7 @@ module.exports = class MongoDB {
 			const newUs = new usersDB({ id: userID });
 			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator } = newUs;
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator };
 		}
 		else {

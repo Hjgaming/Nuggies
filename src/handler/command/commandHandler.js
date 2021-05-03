@@ -61,6 +61,12 @@ class CommandHandler {
 		data.guild = guildDB;
 		data.user = userDB;
 
+		// Blacklist check
+		if (data.user) if (data.user.blacklisted) return;
+
+		// AFK check - does not remove AFK but returns
+		if(data.user) if(data.user.is_afk) return;
+
 		// Prefix
 		let prefixx;
 		if (this.client.cache.guilds) prefixx = !guildDB.prefix ? config.prefix : guildDB.prefix;
