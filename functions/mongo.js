@@ -38,6 +38,7 @@ module.exports = {
 				commands,
 			} = newG;
 			await newG.save().catch(error => console.log(error));
+			this.client.cache.users.push(newG);
 			return {
 				prefix,
 				registeredAt,
@@ -86,6 +87,7 @@ module.exports = {
 			const newUs = new usersDB({ id: userID });
 			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator } = newUs;
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator };
 		}
 		else {
@@ -113,6 +115,7 @@ module.exports = {
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			return { reason };
 		}
 		else {
@@ -132,6 +135,7 @@ module.exports = {
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			return { userID };
 		}
 		else {
@@ -163,6 +167,7 @@ module.exports = {
 				user.blacklisted_reason = null;
 			}
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			cachegoose.clearCache();
 			return { reason };
 		}
@@ -198,6 +203,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { prefix };
 		}
 		guild.prefix = prefix;
@@ -222,6 +228,7 @@ module.exports = {
 				user.developer = false;
 			}
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -254,6 +261,7 @@ module.exports = {
 				user.moderator = false;
 			}
 			await newUs.save().catch(error => console.log(error));
+			this.client.cache.users.push(newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -280,6 +288,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -300,6 +309,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { channel };
 		}
 		guild.chatbot_channel = channel;
@@ -318,6 +328,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -338,6 +349,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { channel };
 		}
 		guild.automeme_channel = channel;
@@ -356,6 +368,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { role };
 		}
 		guild.mute_role = role;
@@ -374,6 +387,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -394,6 +408,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { role };
 		}
 		guild.afk_role = role;
@@ -412,6 +427,7 @@ module.exports = {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
+			this.client.cache.guilds.push(newU);
 			return { toggle };
 		}
 		guild.premium = toggle;
@@ -452,6 +468,7 @@ module.exports = {
 			if(!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
+				this.client.cache.guilds.push(newdoc);
 			}
 			await db.category.push(name);
 			await db.save().catch(e => console.log(e));
@@ -461,6 +478,7 @@ module.exports = {
 			if(!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
+				this.client.cache.guilds.push(newdoc);
 			}
 			await db.commands.push(name);
 			await db.save().catch(e => console.log(e));
