@@ -43,7 +43,7 @@ module.exports = class MongoDB {
 				commands,
 			} = newG;
 			await newG.save().catch(error => console.log(error));
-			this.client.cache.users.push(newG);
+			this.client.cache.users.set(newG.id, newG);
 			return {
 				prefix,
 				registeredAt,
@@ -93,7 +93,7 @@ module.exports = class MongoDB {
 			const newUs = new usersDB({ id: userID });
 			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator } = newUs;
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.push(newUs);
+			this.client.cache.users.set(newUs.id, newUs);
 			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator };
 		}
 		else {
@@ -122,7 +122,7 @@ module.exports = class MongoDB {
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.push(newUs);
+			this.client.cache.users.set(newUs.id, newUs);
 			return { reason };
 		}
 		else {
@@ -143,7 +143,7 @@ module.exports = class MongoDB {
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.push(newUs);
+			this.client.cache.users.set(newUs.id, newUs);
 			return { userID };
 		}
 		else {
@@ -176,7 +176,7 @@ module.exports = class MongoDB {
 				user.blacklisted_reason = null;
 			}
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.push(newUs);
+			this.client.cache.users.set(newUs.id, newUs);
 			cachegoose.clearCache();
 			return { reason };
 		}
@@ -216,7 +216,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { prefix };
 		}
 		guild.prefix = prefix;
@@ -242,7 +242,7 @@ module.exports = class MongoDB {
 				user.developer = false;
 			}
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.push(newUs);
+			this.client.cache.users.set(newUs.id, newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -276,7 +276,7 @@ module.exports = class MongoDB {
 				user.moderator = false;
 			}
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.push(newUs);
+			this.client.cache.users.set(newUs.id, newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -304,7 +304,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -326,7 +326,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { channel };
 		}
 		guild.chatbot_channel = channel;
@@ -346,7 +346,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -368,7 +368,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { channel };
 		}
 		guild.automeme_channel = channel;
@@ -388,7 +388,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { role };
 		}
 		guild.mute_role = role;
@@ -408,7 +408,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -430,7 +430,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { role };
 		}
 		guild.afk_role = role;
@@ -450,7 +450,7 @@ module.exports = class MongoDB {
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.push(newU);
+			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		guild.premium = toggle;
@@ -491,7 +491,7 @@ module.exports = class MongoDB {
 			if (!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
-				this.client.cache.guilds.push(newdoc);
+				this.client.cache.guilds.set(newdoc.id, newdoc);
 			}
 			await db.category.push(name);
 			await db.save().catch(e => console.log(e));
@@ -501,7 +501,7 @@ module.exports = class MongoDB {
 			if (!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
-				this.client.cache.guilds.push(newdoc);
+				this.client.cache.guilds.set(newdoc.id, newdoc);
 			}
 			await db.commands.push(name);
 			await db.save().catch(e => console.log(e));
