@@ -1,6 +1,15 @@
 const { Client, Collection } = require('discord.js');
+const CommandHandler = require('../src/handler/command/commandHandler');
+const EventHandler = require('../src/handler/event/eventHandler');
+const { prefix } = require('./config.json');
+const Cache = require('../functions/cache');
 
 class Nuggies extends Client {
+
+	/**
+	 * @param {Client.options} options
+	 */
+
 	constructor(options) {
 		super(options);
 
@@ -11,18 +20,24 @@ class Nuggies extends Client {
 		this.events = new Collection();
 		this.snipes = new Collection();
 		this.esnipes = new Collection();
-		this.data = require('../functions/mongo');
+		this.data = new (require('../functions/mongo'))(this);
 		this.reminders = new Collection();
 		this.soundboardqueue = new Collection();
+
+		// Handlers
+		this.eventHandler = new EventHandler(this);
+		this.commandHandler = new CommandHandler(this, { prefix });
+
+		// Cache
+		this.cache = new Cache(60 * 1000);
 	}
 
 	/**
-     * @param {String} token Bot's Token
-     * @param {String} mongoDB Your monogDB URL
-     */
-	start(token, mongoDB) {
-		require('./startUp')(this);
+	 * @param {String} token Bot's Token
+	 * @param {String} mongoDB Your monogDB URL
+	 */
 
+	start(token, mongoDB) {
 		this.data.connect(mongoDB)
 			.then(() => {
 				// If it connects log the following
