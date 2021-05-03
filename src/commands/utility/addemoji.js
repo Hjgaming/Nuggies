@@ -17,7 +17,8 @@ module.exports.run = async (client, message, args, utils, data) => {
 			const extension = parsedEmoji.animated ? '.gif' : '.png';
 			const url = `https://cdn.discordapp.com/emojis/${parsedEmoji.id + extension}`;
 			message.guild.emojis.create(url, parsedEmoji.name)
-				.then((emoji) => { message.channel.send(`Added: ${emoji.url}`); });
+				.then((emoji) => { message.channel.send(`Added: ${emoji.url}`); })
+				.catch(err => message.channel.send('There was an err with that. Heres the err: ```\n' + err + '```'));
 		}
 	}
 };
