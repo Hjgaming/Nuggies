@@ -113,7 +113,7 @@ module.exports = async (client, message) => {
 	// Get prefix from guild else get from config file
 	let prefixx;
 	if (client.cache.guilds) prefixx = !guildDB.prefix ? config.prefix : guildDB.prefix;
-	if (!message.content.match(new RegExp(`^<@!?${client.user.id}>( |)$`))) {
+	if (message.content.match(new RegExp(`^<@!?${client.user.id}>( |)$`))) {
 		const m = new Discord.MessageEmbed()
 			.setTitle('Hi, I\'m Nuggies !')
 			.setDescription('One of the most compact and easy to use bot on Discord!')

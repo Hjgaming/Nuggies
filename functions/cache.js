@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const fs = require('fs');
 
 class Cache {
@@ -17,16 +18,21 @@ class Cache {
 		const schemas = fs.readdirSync('models/');
 		schemas.forEach(async (file, i) => {
 			const schema = require(`../models/${file}`);
-			schema.find()
+			await schema.find()
 				.then(data => {
+					if (!data[0]) return;
 					const name = file.split('.')[0];
-					this[name] = new Map();
-					if(data[0].id) data.forEach((d) => this[name].set(d.id, d));
-					else if(name.toLowerCase() == 'muteroleschema') data.forEach((d) => this[name].set(d.GuildID, d));
-					else if(name.toLowerCase() == 'warningschema') data.forEach((d) => this[name].set(d.UserID, d));
+					this[name] = new Discord.Collection();
+					if (data[0].id) {
+						data.forEach((d) =>
+							this[name].set(d.id, d),
+						);
+					}
+					else if (name.toLowerCase() == 'muteroleschema') { data.forEach((d) => this[name].set(d.GuildID, d)); }
+					else if (name.toLowerCase() == 'warningschema') { data.forEach((d) => this[name].set(d.UserID, d)); }
 				})
-				.catch(err => console.log('Unable to cache data:\n' + err));
-			if(i == schemas.length) this.cached = true;
+				.catch(err => console.log(err));
+			if (i == schemas.length - 1) this.cached = true;
 		});
 	}
 
