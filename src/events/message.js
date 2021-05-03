@@ -30,9 +30,6 @@ module.exports = async (client, message) => {
 
 	if (message.author.bot) return;
 
-	// Check if everything is cached
-
-
 	// Fetch database
 
 	let guildDB;
@@ -94,7 +91,7 @@ module.exports = async (client, message) => {
 				const channel = data.guild.chatbot_channel;
 				if (!channel) return;
 				const sChannel = message.guild.channels.cache.get(channel);
-				if (message.author.bot || sChannel.id !== message.channel.id) return;
+				if (sChannel.id !== message.channel.id) return;
 				sChannel.startTyping();
 				if (!message.content) return sChannel.stopTyping();
 				try {
@@ -116,7 +113,7 @@ module.exports = async (client, message) => {
 	// Get prefix from guild else get from config file
 	let prefixx;
 	if (client.cache.guilds) prefixx = !guildDB.prefix ? config.prefix : guildDB.prefix;
-	if (!message.author.bot && message.content.match(new RegExp(`^<@!?${client.user.id}>( |)$`))) {
+	if (!message.content.match(new RegExp(`^<@!?${client.user.id}>( |)$`))) {
 		const m = new Discord.MessageEmbed()
 			.setTitle('Hi, I\'m Nuggies !')
 			.setDescription('One of the most compact and easy to use bot on Discord!')
@@ -131,7 +128,7 @@ module.exports = async (client, message) => {
 	if (!client.cache.guilds) return;
 
 	const prefixMention = new RegExp(`^<@!?${client.user.id}> `);
-	const prefix = !message.author.bot && message.content.match(prefixMention) ? !message.author.bot && message.content.match(prefixMention)[0] : prefixx;
+	const prefix = message.content.match(prefixMention) ? message.content.match(prefixMention)[0] : prefixx;
 
 	if (!message.content.startsWith(prefix)) return;
 
@@ -154,23 +151,23 @@ module.exports = async (client, message) => {
 		if (data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
 	}
 	// if(client.commands.get(command).config.category === 'Actions') return message.channel.send('due to some difficulties, Actions commands are disabled for atleast a day, please join discord.gg/d98jT3mgxf for updates (we also do premium giveaways)');
-	if (client.commands.get(command).config.developers == true) {
+	if (commandFile.config.developers == true) {
 		if (data.user.developer == false) {
 			return utils.errorEmbed(message, ':warning: This command is restricted only to bot owners.');
 		}
 	}
 
-	if (client.commands.get(command).config.restricted == true) {
+	if (commandFile.config.restricted == true) {
 		if (data.user.moderator == false) {
 			return utils.errorEmbed(message, ':warning: This command is restricted only to bot moderators / owners.');
 		}
 	}
 
-	if (client.commands.get(command).config.disable == true) {
+	if (commandFile.config.disable == true) {
 		return utils.errorEmbed(message, ':warning: This command is disabled for a short period of time! :warning:');
 	}
 
-	if (client.commands.get(command).config.args == true) {
+	if (commandFile.config.args == true) {
 		if (!args[0]) {
 			return utils.errorEmbed(message, `Invalid arguments. Use: ${prefix + 'help ' + client.commands.get(command).help.name}`);
 		}
@@ -201,26 +198,24 @@ module.exports = async (client, message) => {
 
 	// Command Logs
 
-	if (commandFile) {
-		try {
-			if (client.user.id === '779741162465525790') {
-				if (!command) return;
-				const m = new Discord.MessageEmbed().setTitle(`Command used in ${message.guild.name}`).setColor('RANDOM').addField('User:', `${message.author.tag}`).addField('User ID:', `${message.author.id}`).addField('Command:', `${command}`).addField('Message Content:', `${message.content}`).addField('Guild ID:', `${message.guild.id}`);
-				await cmdhook.send(m);
-			}
-			await timestamps.set(message.author.id, Date.now());
-			setTimeout(
-				async () => await timestamps.delete(message.author.id), cooldown);
-			await commandFile.run(client, message, args, utils, data);
+	try {
+		if (client.user.id === '779741162465525790') {
+			if (!command) return;
+			const m = new Discord.MessageEmbed().setTitle(`Command used in ${message.guild.name}`).setColor('RANDOM').addField('User:', `${message.author.tag}`).addField('User ID:', `${message.author.id}`).addField('Command:', `${command}`).addField('Message Content:', `${message.content}`).addField('Guild ID:', `${message.guild.id}`);
+			await cmdhook.send(m);
 		}
-		catch (error) {
-			// Command Errors
-			if (client.user.id === '779741162465525790') {
-				const errEmbed = new Discord.MessageEmbed().setTitle(`Command error in ${message.guild.name}`).addField('Additional Details', `**Guild ID :** ${message.guild.id}\n**Author :** ${message.author.tag}(${message.author.id})\n**Command :** ${commandFile.help.name}\n**Content :** ${message.content}`, false).setDescription(`**Error:**\n\`\`\`js\n${error}\n\`\`\``).setTimestamp();
-				errhook.send(errEmbed);
-			}
-			console.log(error);
-			return message.channel.send(new Discord.MessageEmbed().setTitle('Something went wrong!').setDescription('please report it in our [support server](https://discord.gg/ut7PxgNdef)').setColor('RED'));
+		await timestamps.set(message.author.id, Date.now());
+		setTimeout(
+			async () => await timestamps.delete(message.author.id), cooldown);
+		await commandFile.run(client, message, args, utils, data);
+	}
+	catch (error) {
+		// Command Errors
+		if (client.user.id === '779741162465525790') {
+			const errEmbed = new Discord.MessageEmbed().setTitle(`Command error in ${message.guild.name}`).addField('Additional Details', `**Guild ID :** ${message.guild.id}\n**Author :** ${message.author.tag}(${message.author.id})\n**Command :** ${commandFile.help.name}\n**Content :** ${message.content}`, false).setDescription(`**Error:**\n\`\`\`js\n${error}\n\`\`\``).setTimestamp();
+			errhook.send(errEmbed);
 		}
+		console.log(error);
+		return message.channel.send(new Discord.MessageEmbed().setTitle('Something went wrong!').setDescription('please report it in our [support server](https://discord.gg/ut7PxgNdef)').setColor('RED'));
 	}
 };
