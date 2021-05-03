@@ -30,34 +30,42 @@ module.exports = async (client, message) => {
 
 	if (message.author.bot) return;
 
+	// Check if everything is cached
+
+
 	// Fetch database
 
-	const guildDB = await client.data.getGuildDB(message.guild.id);
-	const userDB = await client.data.getUserDB(message.author.id);
+	let guildDB;
+	if (client.cache.guilds) guildDB = await client.data.getGuildDB(message.guild.id);
+	let userDB;
+	if (client.cache.users) userDB = await client.data.getUserDB(message.author.id);
 	const data = {};
 	data.guild = guildDB;
 	data.user = userDB;
 
 	// check if user is blacklisted
 
-	if (data.user.blacklisted) return;
+	if (data.user) if (data.user.blacklisted) return;
 
 	// AFK thingy
 
-	if (userDB.is_afk) {
-		await client.data.removeAfk(message.author.id);
-		message.channel.send(Discord.Util.removeMentions('Welcome back **' + message.author.username + '**! You are no longer afk.'))
-		// eslint-disable-next-line no-unused-vars
-			.catch((error) => {
-				return true;
-			});
+	if (userDB) {
+		if (userDB.is_afk) {
+			await client.data.removeAfk(message.author.id);
+			message.channel.send(Discord.Util.removeMentions('Welcome back **' + message.author.username + '**! You are no longer afk.'))
+				// eslint-disable-next-line no-unused-vars
+				.catch((error) => {
+					return true;
+				});
+		}
 	}
 
 	message.mentions.users.forEach(async (u) => {
+		if (!client.data.users) return;
 		const userData = await client.data.getUserDB(u.id);
-		if (userData.is_afk) {
+		if (userDB.is_afk) {
 			message.channel.send(`**${u.tag}** is currently afk for: **${userData.afkReason}**`)
-			// eslint-disable-next-line no-unused-vars
+				// eslint-disable-next-line no-unused-vars
 				.catch((error) => {
 					return true;
 				});
@@ -66,54 +74,61 @@ module.exports = async (client, message) => {
 
 	// Chatbot thingy
 
-	if (data.guild.chatbot_enabled && data.guild.chatbot_channel == message.channel.id) {
-		const badwords = ['nigger', 'nigga', 'nibba', 'nibber'];
-		const bl_log_channel = client.channels.cache.get('809317042058035241');
-		const reason = 'saying a blacklisted word.';
-		if (badwords.some((word) => message.content.toLowerCase().includes(word))) {
-			const blacklist = await client.data.blacklist(message.author.id, 'true', reason);
-			const logEmbed = new Discord.MessageEmbed().setTitle('<a:9689_tick:785181267758809120> User Blacklisted').setDescription(`**${message.author.username}#${message.author.discriminator}** was blacklisted from using the bot.\n\nResponsible Moderator : **${message.author.username}**\n\nReason : **${blacklist.reason}** \n **message**: ${message.content}`).setFooter('Blacklist registered').setColor('RED').setTimestamp();
-			bl_log_channel.send(logEmbed);
-			message.author.send(`You have been blacklisted from using the bot! \n **Reason:** ${reason}\n **Moderator:** ${message.author.tag} \n**Join Nuggies Support to appeal:** https://discord.gg/ut7PxgNdef`).catch((err) => {
-				message.channel.send(`${message.author.username} has DM's disabled. I was unable to send him a message - but blacklist has been registered!`);
-				console.log(err);
-				return;
-			});
-		}
+	if (data) {
+		if (data.guild) {
+			if (data.guild.chatbot_enabled && data.guild.chatbot_channel == message.channel.id) {
+				const badwords = ['nigger', 'nigga', 'nibba', 'nibber'];
+				const bl_log_channel = client.channels.cache.get('809317042058035241');
+				const reason = 'saying a blacklisted word.';
+				if (badwords.some((word) => message.content.toLowerCase().includes(word))) {
+					const blacklist = await client.data.blacklist(message.author.id, 'true', reason);
+					const logEmbed = new Discord.MessageEmbed().setTitle('<a:9689_tick:785181267758809120> User Blacklisted').setDescription(`**${message.author.username}#${message.author.discriminator}** was blacklisted from using the bot.\n\nResponsible Moderator : **${message.author.username}**\n\nReason : **${blacklist.reason}** \n **message**: ${message.content}`).setFooter('Blacklist registered').setColor('RED').setTimestamp();
+					bl_log_channel.send(logEmbed);
+					message.author.send(`You have been blacklisted from using the bot! \n **Reason:** ${reason}\n **Moderator:** ${message.author.tag} \n**Join Nuggies Support to appeal:** https://discord.gg/ut7PxgNdef`).catch((err) => {
+						message.channel.send(`${message.author.username} has DM's disabled. I was unable to send him a message - but blacklist has been registered!`);
+						console.log(err);
+						return;
+					});
+				}
 
-		const channel = data.guild.chatbot_channel;
-		if (!channel) return;
-		const sChannel = message.guild.channels.cache.get(channel);
-		if (message.author.bot || sChannel.id !== message.channel.id) return;
-		sChannel.startTyping();
-		if(!message.content) return sChannel.stopTyping();
-		try {
-			const basefetch = await fetch(`${chatbase}/chatbot?message=${encodeURIComponent(message.content)}&botname=${encodeURIComponent('Nuggies')}&ownername=${encodeURIComponent('AssassiN#1234')}&user=${message.author.id}`, {});
-			const response = await basefetch.json();
-			message.reply(response.message, { allowedMentions: { parse: [], users: [], roles: [], repliedUser: false } });
+				const channel = data.guild.chatbot_channel;
+				if (!channel) return;
+				const sChannel = message.guild.channels.cache.get(channel);
+				if (message.author.bot || sChannel.id !== message.channel.id) return;
+				sChannel.startTyping();
+				if (!message.content) return sChannel.stopTyping();
+				try {
+					const basefetch = await fetch(`${chatbase}/chatbot?message=${encodeURIComponent(message.content)}&botname=${encodeURIComponent('Nuggies')}&ownername=${encodeURIComponent('AssassiN#1234')}&user=${message.author.id}`, {});
+					const response = await basefetch.json();
+					message.reply(response.message, { allowedMentions: { parse: [], users: [], roles: [], repliedUser: false } });
+				}
+				catch (e) {
+					message.reply('something went wrong! please report it on our support server discord.gg/d98jT3mgxf');
+					console.log(e);
+					return sChannel.stopTyping;
+				}
+				sChannel.stopTyping();
+			}
 		}
-		catch (e) {
-			message.reply('something went wrong! please report it on our support server discord.gg/d98jT3mgxf');
-			console.log(e);
-			return sChannel.stopTyping;
-		}
-		sChannel.stopTyping();
 	}
-	if (message.author.bot) return;
 
 	// Ping Embed
 	// Get prefix from guild else get from config file
-	const prefixx = !guildDB.prefix ? config.prefix : guildDB.prefix;
+	let prefixx;
+	if (client.cache.guilds) prefixx = !guildDB.prefix ? config.prefix : guildDB.prefix;
 	if (!message.author.bot && message.content.match(new RegExp(`^<@!?${client.user.id}>( |)$`))) {
 		const m = new Discord.MessageEmbed()
 			.setTitle('Hi, I\'m Nuggies !')
-			.setDescription('one of the most compact and easy to use bot on Discord !')
-			.addField('Prefix and Usage', 'My current prefixes are ' + `\`${prefixx}\` and <@${client.user.id}>` + `\n *Tip: Run \`${prefixx}help\` to get started! | use \`${prefixx}setprefix <prefix>\` to change prefix!*`)
+			.setDescription('One of the most compact and easy to use bot on Discord!')
+			.addField('Prefix and Usage', !client.cache.guilds ? '**The bot is still starting!**' : 'My current prefixes are ' + `\`${prefixx}\` and <@${client.user.id}>` + `\n *Tip: Run \`${prefixx}help\` to get started! | use \`${prefixx}setprefix <prefix>\` to change prefix!*`)
 			.addField('Invites :', '[Support server](https://discord.gg/ut7PxgNdef) | [Bot invite](https://discord.com/oauth2/authorize?client_id=779741162465525790&permissions=1609952503&scope=bot%20applications.commands)')
 			.setColor('RANDOM');
 		message.channel.send(m);
 	}
 	// Basic command checks and argument definitions
+
+	// If not cached return
+	if (!client.cache.guilds) return;
 
 	const prefixMention = new RegExp(`^<@!?${client.user.id}> `);
 	const prefix = !message.author.bot && message.content.match(prefixMention) ? !message.author.bot && message.content.match(prefixMention)[0] : prefixx;
@@ -132,11 +147,11 @@ module.exports = async (client, message) => {
 	const commandFile = client.commands.get(command);
 	if (!commandFile) return;
 	const category = client.commands.get(command).config.category.toLowerCase();
-	if(data.guild.category.length) {
-		if(data.guild.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
+	if (data.guild.category.length) {
+		if (data.guild.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
 	}
-	if(data.guild.length) {
-		if(data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
+	if (data.guild.length) {
+		if (data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
 	}
 	// if(client.commands.get(command).config.category === 'Actions') return message.channel.send('due to some difficulties, Actions commands are disabled for atleast a day, please join discord.gg/d98jT3mgxf for updates (we also do premium giveaways)');
 	if (client.commands.get(command).config.developers == true) {
@@ -168,7 +183,7 @@ module.exports = async (client, message) => {
 
 	const timestamps = client.cooldowns.get(command);
 	if (timestamps.has(message.author.id)) {
-		if(data.user.premium == true) {
+		if (data.user.premium == true) {
 			const expirationTime = timestamps.get(message.author.id) + pcooldown;
 			if (Date.now() < expirationTime) {
 				const timeLeft = utils.timer(expirationTime);

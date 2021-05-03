@@ -15,11 +15,18 @@ class Cache {
 
 	async cache() {
 		const schemas = fs.readdirSync('models/');
-		schemas.forEach((file) => {
+		schemas.forEach(async (file, i) => {
 			const schema = require(`../models/${file}`);
 			schema.find()
-				.then(data => this[file.split('.')[0]] = data)
+				.then(data => {
+					const name = file.split('.')[0];
+					this[name] = new Map();
+					if(data[0].id) data.forEach((d) => this[name].set(d.id, d));
+					else if(name.toLowerCase() == 'muteroleschema') data.forEach((d) => this[name].set(d.GuildID, d));
+					else if(name.toLowerCase() == 'warningschema') data.forEach((d) => this[name].set(d.UserID, d));
+				})
 				.catch(err => console.log('Unable to cache data:\n' + err));
+			if(i == schemas.length) this.cached = true;
 		});
 	}
 
