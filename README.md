@@ -32,7 +32,10 @@ gh repo clone Nuggies-bot/Nuggies
 npm install
 node index.js
 ```
+# Hosting
+Nuggies is hosted on digital ocean. If you would like to host your bot on digital ocean you can use the free 100$ credit by pressing the button bellow! Nuggies is hosted on one of their linux droplets. 
 
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%203.svg)](https://www.digitalocean.com/?refcode=29a548a31a41&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 # Reporting Bugs/issues <img src = "https://cdn.discordapp.com/emojis/785064792775720980.png?v=1" width = "40">
 
