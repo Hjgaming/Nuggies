@@ -6,11 +6,7 @@ const cachegoose = new GooseCache(mongoose, {
 mongoose.set('useFindAndModify', false);
 const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
-module.exports = class MongoDB {
-	constructor(client) {
-		this.client = client;
-	}
-
+module.exports = {
 	/**
 	 * @param {string} uri - Mongo Connection URI
 	 */
@@ -20,14 +16,13 @@ module.exports = class MongoDB {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		});
-	}
-
+	},
 	/**
 	 * @param {string} guildID - ID of the Guild
 	 */
 	async getGuildDB(guildID) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID }).lean().cache(120);
 		if (!guild) {
 			const newG = new guildsDB({ id: guildID });
 			const {
@@ -43,7 +38,6 @@ module.exports = class MongoDB {
 				commands,
 			} = newG;
 			await newG.save().catch(error => console.log(error));
-			this.client.cache.users.set(newG.id, newG);
 			return {
 				prefix,
 				registeredAt,
@@ -81,19 +75,17 @@ module.exports = class MongoDB {
 				commands,
 			};
 		}
-	}
-
+	},
 	/**
    * @param {string} userID - ID of the User
    */
 	async getUserDB(userID) {
 		if (!userID) throw new Error('Please Provide a User ID');
-		const user = await this.client.cache.users.find(x => x.id === userID);
+		const user = await usersDB.findOne({ id: userID }).lean().cache(120);
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator } = newUs;
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.set(newUs.id, newUs);
 			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator };
 		}
 		else {
@@ -109,8 +101,7 @@ module.exports = class MongoDB {
 			const moderator = user.moderator;
 			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator };
 		}
-	}
-
+	},
 	/**
    * @param {string} userID - ID of the User
    * @param {string} reason - afk reason
@@ -118,11 +109,10 @@ module.exports = class MongoDB {
 	async setAfk(userID, reason) {
 		if (!userID) throw new Error('Please Provide a User ID');
 		if (!reason) throw new Error('AFK reason can\'t be empty!');
-		const user = await this.client.cache.users.find(x => x.id === userID);
+		const user = await usersDB.findOne({ id: userID });
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.set(newUs.id, newUs);
 			return { reason };
 		}
 		else {
@@ -132,18 +122,16 @@ module.exports = class MongoDB {
 			cachegoose.clearCache();
 			return { reason };
 		}
-	}
-
+	},
 	/**
 	* @param {string} userID - ID of the User
 	*/
 	async removeAfk(userID) {
 		if (!userID) throw new Error('Please Provide a User ID');
-		const user = await this.client.cache.users.find(x => x.id === userID);
+		const user = await usersDB.findOne({ id: userID });
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.set(newUs.id, newUs);
 			return { userID };
 		}
 		else {
@@ -153,18 +141,17 @@ module.exports = class MongoDB {
 			cachegoose.clearCache();
 			return { userID };
 		}
-	}
-
+	},
 	/**
-	* @param {string} userID - ID of the User
-	* @param {string} toggle - blacklist toggle
-	* @param {string} reason - blacklisted reason
-	*/
+* @param {string} userID - ID of the User
+* @param {string} toggle - blacklist toggle
+* @param {string} reason - blacklisted reason
+*/
 	async blacklist(userID, toggle, reason) {
 		if (!userID) throw new Error('Please Provide a User ID');
 		if (!toggle) throw new Error('Please Provide a toggle');
 		if (!reason) throw new Error('Blacklist reason can\'t be empty!');
-		const user = await this.client.cache.users.find(x => x.id === userID);
+		const user = await usersDB.findOne({ id: userID });
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			if (toggle == 'true') {
@@ -176,7 +163,6 @@ module.exports = class MongoDB {
 				user.blacklisted_reason = null;
 			}
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.set(newUs.id, newUs);
 			cachegoose.clearCache();
 			return { reason };
 		}
@@ -193,18 +179,14 @@ module.exports = class MongoDB {
 			cachegoose.clearCache();
 			return { reason };
 		}
-	}
-
+	},
 	/**
  * @param {string} guildID - ID of the Guild
  */
 	async deleteGuild(guildID) {
 		await guildsDB.deleteOne({ id: guildID });
-		const toDelete = this.client.cache.guilds.find(x => x.id === guildID);
-		this.client.cache.guilds = this.client.cache.guilds.filter(x => x !== toDelete);
 		return;
-	}
-
+	},
 	/**
 	 * @param {string} guildID - ID of the User
 	 * @param {string} prefix - Guild prefix
@@ -212,19 +194,17 @@ module.exports = class MongoDB {
 	async setPrefix(guildID, prefix) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!prefix) throw new Error('Please Provide a prefix!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { prefix };
 		}
 		guild.prefix = prefix;
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { prefix };
-	}
-
+	},
 	/**
 	* @param {string} userID - ID of the User
 	* @param {string} toggle - blacklist toggle
@@ -232,7 +212,7 @@ module.exports = class MongoDB {
 	async developer(userID, toggle) {
 		if (!userID) throw new Error('Please Provide a User ID');
 		if (!toggle) throw new Error('Please Provide a toggle');
-		const user = await this.client.cache.users.find(x => x.id === userID);
+		const user = await usersDB.findOne({ id: userID });
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			if (toggle == 'true') {
@@ -242,7 +222,6 @@ module.exports = class MongoDB {
 				user.developer = false;
 			}
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.set(newUs.id, newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -257,8 +236,7 @@ module.exports = class MongoDB {
 			cachegoose.clearCache();
 			return;
 		}
-	}
-
+	},
 	/**
 	* @param {string} userID - ID of the User
 	* @param {string} toggle - blacklist toggle
@@ -266,7 +244,7 @@ module.exports = class MongoDB {
 	async moderator(userID, toggle) {
 		if (!userID) throw new Error('Please Provide a User ID');
 		if (!toggle) throw new Error('Please Provide a toggle');
-		const user = await this.client.cache.users.find(x => x.id === userID);
+		const user = await usersDB.findOne({ id: userID });
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			if (toggle == 'true') {
@@ -276,7 +254,6 @@ module.exports = class MongoDB {
 				user.moderator = false;
 			}
 			await newUs.save().catch(error => console.log(error));
-			this.client.cache.users.set(newUs.id, newUs);
 			cachegoose.clearCache();
 			return;
 		}
@@ -291,8 +268,7 @@ module.exports = class MongoDB {
 			cachegoose.clearCache();
 			return;
 		}
-	}
-
+	},
 	/**
 	 * @param {string} guildID - ID of the User
 	 * @param {string} toggle - chatbot_enabled
@@ -300,11 +276,10 @@ module.exports = class MongoDB {
 	async setchatbot_enabled(guildID, toggle) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!toggle) throw new Error('Please Provide a toggle!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -313,8 +288,7 @@ module.exports = class MongoDB {
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { toggle };
-	}
-
+	},
 	/**
 	* @param {string} guildID - ID of the User
 	* @param {string} channel - chatbot channel
@@ -322,19 +296,17 @@ module.exports = class MongoDB {
 	async setchatbot_channel(guildID, channel) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!channel) throw new Error('Please Provide a channel!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { channel };
 		}
 		guild.chatbot_channel = channel;
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { channel };
-	}
-
+	},
 	/**
 	 * @param {string} guildID - ID of the User
 	 * @param {string} toggle - automeme_enabled
@@ -342,11 +314,10 @@ module.exports = class MongoDB {
 	async setautomeme_enabled(guildID, toggle) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!toggle) throw new Error('Please Provide a toggle!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -355,8 +326,7 @@ module.exports = class MongoDB {
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { toggle };
-	}
-
+	},
 	/**
 	* @param {string} guildID - ID of the User
 	* @param {string} channel - automeme channel
@@ -364,19 +334,17 @@ module.exports = class MongoDB {
 	async setautomeme_channel(guildID, channel) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!channel) throw new Error('Please Provide a channel!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { channel };
 		}
 		guild.automeme_channel = channel;
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { channel };
-	}
-
+	},
 	/**
 	 * @param {string} guildID - ID of the User
 	 * @param {string} role - mute role
@@ -384,19 +352,17 @@ module.exports = class MongoDB {
 	async setmute_role(guildID, role) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!role) throw new Error('Please Provide a role!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { role };
 		}
 		guild.mute_role = role;
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { role };
-	}
-
+	},
 	/**
 * @param {string} guildID - ID of the User
 * @param {string} toggle - snipe toggle
@@ -404,11 +370,10 @@ module.exports = class MongoDB {
 	async setafk_enabled(guildID, toggle) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!toggle) throw new Error('Please Provide a toggle!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		if (toggle == 'true') toggle = true;
@@ -417,8 +382,7 @@ module.exports = class MongoDB {
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { toggle };
-	}
-
+	},
 	/**
 	 * @param {string} guildID - ID of the User
 	 * @param {string} role - snipe role
@@ -426,19 +390,17 @@ module.exports = class MongoDB {
 	async setafk_role(guildID, role) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!role) throw new Error('Please Provide a role!');
-		const guild = await this.client.cache.guilds.find(x => x.id === guildID);
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { role };
 		}
 		guild.afk_role = role;
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { role };
-	}
-
+	},
 	/**
 	* @param {string} guildID - ID of the User
 	* @param {string} toggle - premium toggle
@@ -446,76 +408,73 @@ module.exports = class MongoDB {
 	async premiumGuild(guildID, toggle) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!toggle) throw new Error('Please Provide a toggle!');
-		const guild = await this.client.cache.guilds.find({ id: guildID });
+		const guild = await guildsDB.findOne({ id: guildID });
 		if (!guild) {
 			const newU = new guildsDB({ id: guildID });
 			await newU.save().catch(error => console.log(error));
-			this.client.cache.guilds.set(newU.id, newU);
 			return { toggle };
 		}
 		guild.premium = toggle;
 		await guild.save().catch(error => console.log(error));
 		cachegoose.clearCache();
 		return { toggle };
-	}
-
+	},
 	/**
 	* @param {string} guildID - ID of the User
 	* @param {string} toggle - premium toggle
 	*/
 	async pushguild(user, guildID, method) {
 		if (!method) return new Error('please provide a method');
-		const data = this.client.cache.users.find(x => x.id === user);
-		if (!data) return new Error('user not found.');
-		if (method === 'push') {
-			await data.premiumservers.push(guildID);
-			await data.save().catch(error => console.log(error));
-			data.save();
-		}
-		if (method === 'splice') {
-			const index = data.premiumservers.indexOf(guildID);
-			data.premiumservers.splice(index, 1);
-			data.save();
-		}
-		cachegoose.clearCache();
-		return { user };
-	}
-
+		usersDB.findOne({ id: user }, async (err, data) => {
+			if (err) throw err;
+			if (!data) return new Error('user not found.');
+			if (method === 'push') {
+				await data.premiumservers.push(guildID);
+				await data.save().catch(error => console.log(error));
+				data.save();
+			}
+			if (method === 'splice') {
+				const index = data.premiumservers.indexOf(guildID);
+				data.premiumservers.splice(index, 1);
+				data.save();
+			}
+			cachegoose.clearCache();
+			return { user };
+		});
+	},
 	async adddisable(id, name, type) {
 		if (!name) throw new Error('name not provided!');
 		if (!type) throw new Error('type not provided!');
 		if (!id) throw new Error('id not provided!');
 
 		if (type === 'category') {
-			const db = await this.client.cache.guilds.find(x => x.id === id);
+			const db = await guildsDB.findOne({ id: id });
 			if (!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
-				this.client.cache.guilds.set(newdoc.id, newdoc);
 			}
 			await db.category.push(name);
 			await db.save().catch(e => console.log(e));
 		}
 		if (type === 'command') {
-			const db = await this.client.cache.guilds.find(x => x.id === id);
+			const db = await guildsDB.findOne({ id: id });
 			if (!db) {
 				const newdoc = await new guildsDB({ id: id });
 				await newdoc.save().catch(error => console.log(error));
-				this.client.cache.guilds.set(newdoc.id, newdoc);
 			}
 			await db.commands.push(name);
 			await db.save().catch(e => console.log(e));
 		}
 		cachegoose.clearCache();
 		return { name };
-	}
+	},
 
 	async removedisable(id, name, type) {
 		if (!id) throw new Error('id not provided');
 		if (!name) throw new Error('name not provided');
 		if (!type) throw new Error('type not provided');
 		if (type === 'category') {
-			const db = await this.client.cache.guilds.find(x => x.id === id);
+			const db = await guildsDB.findOne({ id: id });
 			if (!db) {
 				return false;
 			}
@@ -524,7 +483,7 @@ module.exports = class MongoDB {
 			await db.save().catch(e => console.log(e));
 		}
 		if (type === 'command') {
-			const db = await this.client.cache.guilds.find(x => x.id === id);
+			const db = await guildsDB.findOne({ id: id });
 			if (!db) {
 				return false;
 			}
@@ -534,5 +493,6 @@ module.exports = class MongoDB {
 		}
 		cachegoose.clearCache();
 		return true;
-	}
+
+	},
 };
