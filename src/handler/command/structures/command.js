@@ -1,8 +1,16 @@
 const commandoptions = require('./commandOptions');
 
 class BaseCommand extends commandoptions {
-    constructor() {
-        super();
-    }
+	constructor({
+		help,
+		config,
+		requirements,
+	}) {
+		super({
+			help,
+			config,
+			requirements,
+		});
+	}
 }
 module.exports = BaseCommand;

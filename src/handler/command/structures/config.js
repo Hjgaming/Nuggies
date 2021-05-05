@@ -12,7 +12,7 @@ class ConfigOptions {
 		this.category = category;
 		this.disable = disable;
 		this.cooldown = cooldown;
-		this.devOnly = devOnly;
+		this.developer = devOnly;
 	}
 }
 module.exports = ConfigOptions;
