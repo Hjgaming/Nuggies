@@ -3,7 +3,6 @@ const { GooseCache } = require('goosecache');
 const cachegoose = new GooseCache(mongoose, {
 	engine: 'memory',
 });
-mongoose.set('useFindAndModify', false);
 const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
 module.exports = {
@@ -15,6 +14,7 @@ module.exports = {
 		return mongoose.connect(uri, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
+			useFindAndModify: false
 		});
 	},
 	/**
