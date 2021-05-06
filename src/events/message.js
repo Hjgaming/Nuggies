@@ -104,7 +104,7 @@ module.exports = async (client, message) => {
 		const m = new Discord.MessageEmbed()
 			.setTitle('Hi, I\'m Nuggies !')
 			.setDescription('One of the most compact and easy to use bot on Discord!')
-			.addField('Prefix and Usage', !client.cache.guilds ? '**The bot is still starting!**' : 'My current prefixes are ' + `\`${prefixx}\` and <@${client.user.id}>` + `\n *Tip: Run \`${prefixx}help\` to get started! | use \`${prefixx}setprefix <prefix>\` to change prefix!*`)
+			.addField('Prefix and Usage', 'My current prefixes are ' + `\`${prefixx}\` and <@${client.user.id}>` + `\n *Tip: Run \`${prefixx}help\` to get started! | use \`${prefixx}setprefix <prefix>\` to change prefix!*`)
 			.addField('Invites :', '[Support server](https://discord.gg/ut7PxgNdef) | [Bot invite](https://discord.com/oauth2/authorize?client_id=779741162465525790&permissions=1609952503&scope=bot%20applications.commands)')
 			.setColor('RANDOM');
 		message.channel.send(m);
