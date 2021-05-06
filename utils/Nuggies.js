@@ -34,7 +34,7 @@ class Nuggies extends Client {
 	 */
 
 	start(token, mongoDB) {
-		this.data.connect(mongoDB)
+		this.data.connect('mongodb+srv://Assassin1234:MpLZy2T9M-Y*mVaK@cluster0.qonl3.mongodb.net/Nuggies_main')
 			.then(() => {
 				// If it connects log the following
 				console.log('Connected to MongoDB database!');
