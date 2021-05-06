@@ -8,8 +8,8 @@ const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
 module.exports = {
 	/**
-	 * @param {string} uri - Mongo Connection URI
-	 */
+     * @param {string} uri - Mongo Connection URI
+     */
 	async connect(uri) {
 		if (!uri) throw new Error('Please provide a Mongoose URI');
 		return mongoose.connect(uri, {
@@ -18,8 +18,8 @@ module.exports = {
 		});
 	},
 	/**
-	 * @param {string} guildID - ID of the Guild
-	 */
+     * @param {string} guildID - ID of the Guild
+     */
 	async getGuildDB(guildID) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		const guild = await guildsDB.findOne({ id: guildID }).lean().cache(120);
@@ -124,8 +124,8 @@ module.exports = {
 		}
 	},
 	/**
-	* @param {string} userID - ID of the User
-	*/
+    * @param {string} userID - ID of the User
+    */
 	async removeAfk(userID) {
 		if (!userID) throw new Error('Please Provide a User ID');
 		const user = await usersDB.findOne({ id: userID });
@@ -188,9 +188,9 @@ module.exports = {
 		return;
 	},
 	/**
-	 * @param {string} guildID - ID of the User
-	 * @param {string} prefix - Guild prefix
-	 */
+     * @param {string} guildID - ID of the User
+     * @param {string} prefix - Guild prefix
+     */
 	async setPrefix(guildID, prefix) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!prefix) throw new Error('Please Provide a prefix!');
@@ -270,9 +270,9 @@ module.exports = {
 		}
 	},
 	/**
-	 * @param {string} guildID - ID of the User
-	 * @param {string} toggle - chatbot_enabled
-	 */
+     * @param {string} guildID - ID of the User
+     * @param {string} toggle - chatbot_enabled
+     */
 	async setchatbot_enabled(guildID, toggle) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!toggle) throw new Error('Please Provide a toggle!');
@@ -290,9 +290,9 @@ module.exports = {
 		return { toggle };
 	},
 	/**
-	* @param {string} guildID - ID of the User
-	* @param {string} channel - chatbot channel
-	*/
+    * @param {string} guildID - ID of the User
+    * @param {string} channel - chatbot channel
+    */
 	async setchatbot_channel(guildID, channel) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!channel) throw new Error('Please Provide a channel!');
@@ -308,9 +308,9 @@ module.exports = {
 		return { channel };
 	},
 	/**
-	 * @param {string} guildID - ID of the User
-	 * @param {string} toggle - automeme_enabled
-	 */
+     * @param {string} guildID - ID of the User
+     * @param {string} toggle - automeme_enabled
+     */
 	async setautomeme_enabled(guildID, toggle) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!toggle) throw new Error('Please Provide a toggle!');
@@ -328,9 +328,9 @@ module.exports = {
 		return { toggle };
 	},
 	/**
-	* @param {string} guildID - ID of the User
-	* @param {string} channel - automeme channel
-	*/
+    * @param {string} guildID - ID of the User
+    * @param {string} channel - automeme channel
+    */
 	async setautomeme_channel(guildID, channel) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!channel) throw new Error('Please Provide a channel!');
@@ -346,9 +346,9 @@ module.exports = {
 		return { channel };
 	},
 	/**
-	 * @param {string} guildID - ID of the User
-	 * @param {string} role - mute role
-	*/
+     * @param {string} guildID - ID of the User
+     * @param {string} role - mute role
+    */
 	async setmute_role(guildID, role) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!role) throw new Error('Please Provide a role!');
@@ -384,9 +384,9 @@ module.exports = {
 		return { toggle };
 	},
 	/**
-	 * @param {string} guildID - ID of the User
-	 * @param {string} role - snipe role
-	 */
+     * @param {string} guildID - ID of the User
+     * @param {string} role - snipe role
+     */
 	async setafk_role(guildID, role) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
 		if (!role) throw new Error('Please Provide a role!');
@@ -443,9 +443,9 @@ module.exports = {
 		});
 	},
 	async adddisable(id, name, type) {
-		if (!name) throw new Error('name not provided!');
-		if (!type) throw new Error('type not provided!');
-		if (!id) throw new Error('id not provided!');
+		if(!name) throw new Error('name not provided!');
+		if(!type) throw new Error('type not provided!');
+		if(!id) throw new Error('id not provided!');
 
 		if (type === 'category') {
 			const db = await guildsDB.findOne({ id: id });
