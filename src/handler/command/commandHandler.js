@@ -89,23 +89,23 @@ class CommandHandler {
 			if (data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
 		}
 		// if(this.client.commands.get(command).config.category === 'Actions') return message.channel.send('due to some difficulties, Actions commands are disabled for atleast a day, please join discord.gg/d98jT3mgxf for updates (we also do premium giveaways)');
-		if (commandFile.config.developers == true) {
-			if (data.user.developer == false) {
+		if (commandFile.config.developers) {
+			if (!data.user.developer) {
 				return utils.errorEmbed(message, ':warning: This command is restricted only to bot owners.');
 			}
 		}
 
-		if (commandFile.config.restricted == true) {
-			if (data.user.moderator == false) {
+		if (commandFile.config.restricted) {
+			if (!data.user.moderator) {
 				return utils.errorEmbed(message, ':warning: This command is restricted only to bot moderators / owners.');
 			}
 		}
 
-		if (commandFile.config.disable == true) {
+		if (commandFile.config.disable) {
 			return utils.errorEmbed(message, ':warning: This command is disabled for a short period of time! :warning:');
 		}
 
-		if (commandFile.config.args == true) {
+		if (commandFile.config.args) {
 			if (!args[0]) {
 				return utils.errorEmbed(message, `Invalid arguments. Use: ${prefix + 'help ' + this.client.commands.get(command).help.name}`);
 			}
