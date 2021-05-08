@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const config = require('../../utils/config.json');
 const chatbase = 'https://api.affiliateplus.xyz/api';
 const fetch = require('node-fetch');
-const utils = require('../../../utils/utils.js');
+const utils = require('../../utils/utils.js');
 
 module.exports = async (client, message) => {
 	//                                               -- Message Event Function --
