@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 const { MessageEmbed } = require('discord.js');
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	if (!message.member.hasPermission('MANAGE_CHANNELS')) return message.reply('❌**Error:** You don\'t have the permission to do that! \n you require the `MANAGE CHANNELS` permission.');
+
+	const guildData = await client.findOrCreateGuild({ id: message.guild.id });
+
 	const channel = message.mentions.channels.first();
 	if(args[1] === 'true') {
 		if(!channel) {
@@ -11,13 +14,14 @@ module.exports.run = async (client, message, args, utils, data) => {
 			message.channel.send(m);
 			return;
 		}
-		if(data.guild.chatbot_channel == channel.id) {
+		if(guildData.chatbot_channel == channel.id) {
 			return message.channel.send(new MessageEmbed()
 				.setColor('RED')
 				.addField('Error', `chatbot is already \`true\` in <#${channel.id}>`));
 		}
-		await client.data.setchatbot_enabled(message.guild.id, 'true');
-		await client.data.setchatbot_channel(message.guild.id, channel.id);
+		guildData.chatbot_enabled = true;
+		guildData.chatbot_channel = channel.id;
+		guildData.save();
 		const me = new MessageEmbed()
 			.setColor('GREEN')
 			.addField('Success', `chatbot set to \`true\` in <#${channel.id}>`);
@@ -31,15 +35,16 @@ module.exports.run = async (client, message, args, utils, data) => {
 			message.channel.send(m);
 			return;
 		}
-		if(data.guild.chatbot_channel !== channel.id) {
+		if(guildData.chatbot_channel !== channel.id) {
 			const n = new MessageEmbed()
 				.setColor('RED')
 				.addField('Error', `chatbot is already \`false\` in <#${channel.id}>`);
 			message.channel.send(n);
 			return;
 		}
-		await client.data.setchatbot_enabled(message.guild.id, 'false');
-		await client.data.setchatbot_channel(message.guild.id, 'null');
+		guildData.chatbot_enabled = false;
+		guildData.chatbot_channel = 'null';
+		guildData.save();
 		const a = new MessageEmbed()
 			.setColor('GREEN')
 			.addField('Success', `chatbot successfully set to \`false\` in <#${channel.id}>`);

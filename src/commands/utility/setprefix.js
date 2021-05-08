@@ -7,8 +7,9 @@ module.exports.run = async (client, message, args, utils, data) => {
 
 	if (args[0].length > 5) return message.channel.send('Your new prefix must be under ``5`` characters!');
 
-	await client.data.setPrefix(message.guild.id, args[0]);
-
+	const guildData = await client.findOrCreateGuild({ id: message.guild.id });
+	guildData.prefix = args[0];
+	guildData.save();
 	message.channel.send(`The new prefix is **\`${args[0]}\`**`);
 
 };
