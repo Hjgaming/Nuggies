@@ -1,8 +1,13 @@
 /* eslint-disable no-unused-vars */
-const Discord = require('discord.js');
 module.exports.run = async (client, message, args, utils) => {
 	const afkreason = args.join(' ') || 'AFK';
-	await client.data.setAfk(message.author.id, afkreason);
+
+	const userData = await client.findOrCreateUser({ id: message.author.id });
+
+	userData.is_afk = true;
+	userData.afkReason = afkreason;
+	userData.save();
+
 	message.channel.send(`You are now afk for: **\`${afkreason}\`**`, { allowedMentions: { parse: [], roles: [], users: [] } });
 };
 
