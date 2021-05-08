@@ -2,7 +2,7 @@
 module.exports.run = async (client, message, args, utils) => {
 	const afkreason = args.join(' ') || 'AFK';
 
-	const userData = await client.findOrCreateUser({ id: message.author.id });
+	const userData = await utils.findOrCreateUser(client, { id: message.author.id });
 
 	userData.is_afk = true;
 	userData.afkReason = afkreason;

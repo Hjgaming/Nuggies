@@ -50,8 +50,8 @@ class CommandHandler {
 		if (message.author.bot || !message.guild) return;
 
 		// Cache data
-		const guildData = await this.client.findOrCreateGuild({ id: message.guild.id });
-		const userData = await this.client.findOrCreateUser({ id: message.author.id });
+		const guildData = await utils.findOrCreateGuild(this.client, { id: message.guild.id });
+		const userData = await utils.findOrCreateUser(this.client, { id: message.author.id });
 
 		// Blacklist check
 		if (userData.blacklisted) return;

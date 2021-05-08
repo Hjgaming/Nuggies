@@ -2,8 +2,8 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args, utils) => {
-	const guildData = await client.findOrCreateGuild({ id: message.guild.id });
-	const userData = await client.findOrCreateUser({ id: message.author.id });
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+	const userData = await utils.findOrCreateUser(client, { id: message.author.id });
 
 	if(userData.premium == false) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('This command is only for donors, please [__**click here**__](https://bot.nuggetdev.com/premium) to donate!').setColor('RED'));
 	if (!message.member.hasPermission('MANAGE_CHANNELS')) return message.reply('❌**Error:** You don\'t have the permission to do that! \n you require the `MANAGE CHANNELS` permission.');

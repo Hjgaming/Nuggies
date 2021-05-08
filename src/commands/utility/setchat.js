@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports.run = async (client, message, args, utils) => {
 	if (!message.member.hasPermission('MANAGE_CHANNELS')) return message.reply('❌**Error:** You don\'t have the permission to do that! \n you require the `MANAGE CHANNELS` permission.');
 
-	const guildData = await client.findOrCreateGuild({ id: message.guild.id });
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
 
 	const channel = message.mentions.channels.first();
 	if(args[1] === 'true') {
