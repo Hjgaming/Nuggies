@@ -9,8 +9,8 @@ module.exports = async (client) => {
 	console.log(`${client.user.username} is now online!`);
 	client.user.setActivity('bot.nuggetdev.com/premium', { type: 'WATCHING', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' });
 	if (client.user.id !== '779741162465525790') return;
-	const Webhook = new Discord.WebhookClient(process.env.ready_webhook_id, process.env.ready_webhook_token);
-	Webhook.send(new Discord.MessageEmbed().setTitle('Nuggies was restarted!').setDescription('Nuggies just got restarted!').setColor('e03854').setTimestamp().setFooter('Nuggies restarted!'));
+	// const Webhook = new Discord.WebhookClient(process.env.ready_webhook_id, process.env.ready_webhook_token);
+	// Webhook.send(new Discord.MessageEmbed().setTitle('Nuggies was restarted!').setDescription('Nuggies just got restarted!').setColor('e03854').setTimestamp().setFooter('Nuggies restarted!'));
 
 	// automeme
 	automeme.find({ automeme_enabled: true }, async (err, data) => {
