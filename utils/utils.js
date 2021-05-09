@@ -69,7 +69,7 @@ module.exports.findOrCreateGuild = 	async function(client, { id: guildID }, isLe
 		return isLean ? client.dbCache.guilds.get(guildID).toJSON() : client.dbCache.guilds.get(guildID);
 	}
 	else {
-		let guildData = isLean ? await client.guildsData.findOne({ id: guildID }).populate('members').lean() : await client.guildsData.findOne({ id: guildID }).populate('members');
+		let guildData = isLean ? await client.guildsData.findOne({ id: guildID }).lean() : await client.guildsData.findOne({ id: guildID });
 		if (guildData) {
 			if (!isLean) client.dbCache.guilds.set(guildID, guildData);
 			return guildData;
