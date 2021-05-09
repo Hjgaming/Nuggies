@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
 const discordTTS = require('discord-tts');
 const play = require('../../../functions/playstream');
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	if (!message.guild.me.hasPermission(['CONNECT', 'SPEAK'])) return message.reply('I do not have permissions to join voice channels!', { allowedMentions: { repliedUser: false } });
 	const channel = message.member.voice.channel;
 	if (!args) return message.channel.send('Please provide something to convert to TTS!');

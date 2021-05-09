@@ -38,7 +38,7 @@ module.exports.run = async (client, message, args, utils) => {
 	}
 	else {
 		const dataPing = Date.now();
-		await client.data.getGuildDB(message.guild.id);
+		await utils.findOrCreateGuild(client, { id: message.guild.id });
 		const dataPingNow = Date.now();
 		const dataRealPing = dataPingNow - dataPing;
 		const m = await message.channel.send(new Discord.MessageEmbed().setAuthor('🏓 Pinging....'));

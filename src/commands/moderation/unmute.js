@@ -3,14 +3,16 @@ const config = require('../../../utils/config.json');
 const Discord = require('discord.js');
 const muteRoleModel = require('../../../models/muteRoleSchema');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	if (!message.member.hasPermission('MANAGE_ROLES')) return message.reply('❌**Error:** You don\'t have the permission to do that! \n you require the `MANAGE ROLES` permission');
 
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+
 	let muteRoleId;
-	if(data.guild.mute_role == 'null') {
+	if(guildData.mute_role == 'null') {
 		muteRoleId = message.guild.roles.cache.find(r => r.name === 'Muted');
 	}
-	else { muteRoleId = message.guild.roles.cache.find(r => r.id === data.guild.mute_role); }
+	else { muteRoleId = message.guild.roles.cache.find(r => r.id === guildData.mute_role); }
 
 	// This check isn't required but just in case
 	if (!muteRoleId) return message.channel.send('There seems to be an issue fetching the data. Please mute someone first!');

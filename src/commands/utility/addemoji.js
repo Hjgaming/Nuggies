@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const { parse } = require('superagent');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	if (!message.guild.member(client.user).hasPermission('MANAGE_EMOJIS')) return message.reply('❌**Error:** I don\'t have the **Manage Emojis** permission!');
 	if (!message.member.hasPermission('MANAGE_EMOJIS')) return message.reply('❌**Error:** You don\'t have the permission to do that! \n you require the **Manage Emojis** permission.');
 	const image = message.attachments.first() || null;
