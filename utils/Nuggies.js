@@ -36,7 +36,7 @@ class Nuggies extends Client {
 	}
 
 	// async findOrCreateUser({ id: userID }, isLean) {
-	// 	if (this.dbCache.users.get(userID)) { 
+	// 	if (this.dbCache.users.get(userID)) {
 	// 		return isLean ? this.dbCache.users.get(userID).toJSON() : this.dbCache.users.get(userID);
 	// 	} else {
 	// 		let userData = isLean ? await this.usersData.findOne({ id: userID }).lean() : await this.usersData.findOne({ id: userID });

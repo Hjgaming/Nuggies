@@ -46,35 +46,39 @@ module.exports.timer = function(timestamp) {
 };
 
 module.exports.findOrCreateUser = async function(client, { id: userID }, isLean) {
-	if (client.dbCache.users.get(userID)) { 
+	if (client.dbCache.users.get(userID)) {
 		return isLean ? client.dbCache.users.get(userID).toJSON() : client.dbCache.users.get(userID);
-	} else {
+	}
+	else {
 		let userData = isLean ? await client.usersData.findOne({ id: userID }).lean() : await client.usersData.findOne({ id: userID });
 		if (userData) {
 			if (!isLean) client.dbCache.users.set(userID, userData);
 			return userData;
-		} else { // eslint-disable-next-line new-cap
+		}
+		else { // eslint-disable-next-line new-cap
 			userData = new client.usersData({ id: userID });
 			await userData.save();
 			client.dbCache.users.set(userID, userData);
 			return isLean ? userData.toJSON() : userData;
 		}
 	}
-}
+};
 
 module.exports.findOrCreateGuild = 	async function(client, { id: guildID }, isLean) {
 	if (client.dbCache.guilds.get(guildID)) {
 		return isLean ? client.dbCache.guilds.get(guildID).toJSON() : client.dbCache.guilds.get(guildID);
-	} else {
+	}
+	else {
 		let guildData = isLean ? await client.guildsData.findOne({ id: guildID }).populate('members').lean() : await client.guildsData.findOne({ id: guildID }).populate('members');
 		if (guildData) {
 			if (!isLean) client.dbCache.guilds.set(guildID, guildData);
 			return guildData;
-		} else { // eslint-disable-next-line new-cap
+		}
+		else { // eslint-disable-next-line new-cap
 			guildData = new client.guildsData({ id: guildID });
 			await guildData.save();
 			client.dbCache.guilds.set(guildID, guildData);
 			return isLean ? guildData.toJSON() : guildData;
 		}
 	}
-}
+};
