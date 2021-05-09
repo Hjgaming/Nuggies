@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
+
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
 
 	const muteRole = message.mentions.roles.first();
 
@@ -32,7 +34,8 @@ module.exports.run = async (client, message, args, utils, data) => {
 	if(!args) return message.channel.send(argcheck);
 
 	if (!message.member.hasPermission('MANAGE_GUILD')) return message.channel.send(perms);
-	await client.data.setmute_role(message.guild.id, muteRole.id);
+	guildData.mute_role = muteRole.id;
+	guildData.save();
 	message.channel.send(success);
 };
 module.exports.help = {

@@ -4,8 +4,9 @@ const { getUserDB } = require('../../../functions/mongo');
 module.exports.run = async (client, message, args, utils, data) => {
 	const target = args[0];
 	if(!target) return message.channel.send('please provide a user id to ayo.');
-	client.users.fetch(args[0]);
-	const gettier = await getUserDB(target);
+	const checkUser = client.users.fetch(args[0]);
+	if (checkUser) const gettier = await utils.findOrCreateUser(client, { id: target });
+	if (!checkUser) return message.channel.send(new Discord.MessageEmbed().setTitle(':warning: Error').setDescription(`${target} is not a valid user id. Not even sure what you're on about`,).setColor('RED'));
 	let tier = 0;
 	if(gettier.tier == 1) tier = 3;
 	if(gettier.tier == 2) tier = 5;

@@ -31,11 +31,11 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 
-	const fetch = await client.data.getUserDB(target.id);
+	const fetch = await utils.findOrCreateUser(client, { id: target.id });
 
 	if (fetch.moderator) {
-
-		await client.data.moderator(target.id, 'false');
+		fetch.moderator = false;
+		fetch.save();
 		message.channel.send(
 			new Discord.MessageEmbed()
 				.setTitle('<a:9689_tick:785181267758809120> Success!')

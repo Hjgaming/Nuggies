@@ -7,12 +7,15 @@ module.exports.run = async (client, message, args, utils, data) => {
 
 	if(!target) return utils.errorEmbed(message, ':warning: Invalid user.');
 
-	const checkbl = await client.data.getUserDB(target.id);
+	const checkbl = await utils.findOrCreateUser(client, { id: target.id });
 	const channel = client.channels.cache.get(`809317042058035241`);
 
 	if(!checkbl.blacklisted) return message.reply(`That user isn't blacklisted!\nUser: ${target.username + '#' + target.discriminator}`);
 
-	await client.data.blacklist(target.id, 'false', 'null');
+	checkbl.blacklisted = false;
+	checkbl.blacklisted_reason = null;
+	checkbl.save();
+
 	const logEmbed = new Discord.MessageEmbed()
 		.setTitle(`<a:9689_tick:785181267758809120> User Whitelisted`)
 		.setDescription(`**${target.username}#${target.discriminator}** was whitelisted for using the bot.\n\nResponsible Moderator : **${message.author.username}**`)

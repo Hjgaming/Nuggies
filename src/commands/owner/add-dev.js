@@ -18,13 +18,14 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 
-	const fetch = await client.data.getUserDB(target.id);
+	const fetch = await utils.findOrCreateUser(client, { id: target.id });
 	if (fetch.developer) {
 		return message.channel.send(new Discord.MessageEmbed().setTitle(':warning: Error').setDescription('This user already has developer permissions').setColor('RED'),
 		);
 	}
 	else {
-		await client.data.developer(target.id, 'true');
+		fetch.developer = true;
+		fetch.save();
 
 		message.channel.send(new Discord.MessageEmbed().setTitle('<a:9689_tick:785181267758809120> Success!').setDescription(`**<@${target.id}>** was successfully given developer permissions`).setColor('GREEN'));
 		message.guild.members.cache.get(target.id).send(new Discord.MessageEmbed().setTitle(':warning: Alert').setDescription(`You were granted developer permissions by **${message.author.tag}** for **Nuggies**`).setColor('GREEN'));

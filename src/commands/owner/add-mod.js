@@ -32,7 +32,7 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 
-	const fetch = await client.data.getUserDB(target.id);
+	const fetch = await utils.findOrCreateUser(client, { id: target.id });
 
 	if (fetch.moderator) {
 		return message.channel.send(
@@ -43,7 +43,8 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 	else {
-		await client.data.moderator(target.id, 'true');
+		fetch.moderator = true;
+		fetch.save();
 
 		message.channel.send(
 			new Discord.MessageEmbed()
