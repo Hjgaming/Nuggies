@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	const target = await client.users.fetch(args[0]);
 
 	if(!target) return utils.errorEmbed(message, ':warning: Invalid user.');

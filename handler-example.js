@@ -2,7 +2,9 @@
 const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+	const userData = await utils.findOrCreateUser(client, { id: message.author.id });
 // code here
 };
 

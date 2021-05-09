@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
 const ms = require('ms');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	const errEmbed = new Discord.MessageEmbed()
 		.setAuthor('⚠️ Please pull the role up in the hierarchy for it to work properly')
 		.setDescription(':exclamation: To set a custom mute role, delete the current one and use `$muterole <@​role>`! :exclamation:')
@@ -12,11 +12,11 @@ module.exports.run = async (client, message, args, utils, data) => {
 	if (!message.member.hasPermission('MANAGE_ROLES')) return message.reply('❌**Error:** You don\'t have the permission to do that! \n you require the `MANAGE ROLES` permission');
 
 	let muteRoleId;
-
-	if(data.guild.mute_role == 'null') {
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+	if(guildData.mute_role == 'null') {
 		muteRoleId = message.guild.roles.cache.find(r => r.name === 'Muted');
 	}
-	else { muteRoleId = message.guild.roles.cache.find(r => r.id === data.guild.mute_role); }
+	else { muteRoleId = message.guild.roles.cache.find(r => r.id === guildData.mute_role); }
 
 	if(!muteRoleId) {
 		try {

@@ -3,14 +3,14 @@ const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
 const ms = require('ms');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 
 	let muteRoleId;
-
-	if(data.guild.mute_role == 'null') {
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+	if(guildData.mute_role == 'null') {
 		muteRoleId = message.guild.roles.cache.find(r => r.name === 'Muted');
 	}
-	else { muteRoleId = message.guild.roles.cache.find(r => r.id === data.guild.mute_role); }
+	else { muteRoleId = message.guild.roles.cache.find(r => r.id === guildData.mute_role); }
 	if(!muteRoleId) return message.channel.send('Mute role not set for this server. Please set the muterole using the .muterole command!');
 	try {
 		await message.member.roles.add(muteRoleId);

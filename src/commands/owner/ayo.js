@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
 const { getUserDB } = require('../../../functions/mongo');
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	const target = args[0];
 	if(!target) return message.channel.send('please provide a user id to ayo.');
 	const checkUser = client.users.fetch(args[0]);
