@@ -496,4 +496,10 @@ module.exports = {
 		return true;
 
 	},
+	async returnpoints(id) {
+		if(!id) throw new Error('id not provided');
+		const db = await pointsDB.findOne({ id: id });
+		if(!db) throw new Error('user doesnt exist');
+		return db.points;
+	},
 };
