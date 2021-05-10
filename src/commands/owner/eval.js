@@ -4,7 +4,7 @@ function clean(text) {
 	else {return text;}
 }
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	const code = args.join(' ');
 	const hasAwait = code.includes('await');
 	const hasReturn = code.includes('return');

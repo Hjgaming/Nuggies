@@ -8,7 +8,7 @@ const fs = require('fs');
 const config = require('../../../utils/config.json');
 const settings = require('../../../utils/config.json');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	let totalUsers = 0;
 	function sum() {
 		client.guilds.cache.forEach(guild => {
@@ -28,7 +28,8 @@ module.exports.run = async (client, message, args, utils, data) => {
 	minutes = (minutes < 10) ? '0' + minutes : minutes;
 	seconds = (seconds < 10) ? '0' + seconds : seconds;
 	const globalprefix = settings.prefix;
-	const serverPrefix = data.guild.prefix;
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+	const serverPrefix = guildData.prefix;
 
 	let Prefix;
 	if(serverPrefix !== null) Prefix = serverPrefix;

@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 const config = require('../../utils/config.json');
 const chatbase = 'https://api.affiliateplus.xyz/api';
 const fetch = require('node-fetch');
+const utils = require('../../utils/utils.js');
 
 module.exports = async (client, message) => {
 	//                                               -- Message Event Function --
@@ -28,19 +29,18 @@ module.exports = async (client, message) => {
 	if (message.author.bot) return;
 
 	// Fetch database
-	const guildDB = await client.data.getGuildDB(message.guild.id);
-	const userDB = await client.data.getUserDB(message.author.id);
-	const data = {};
-	data.guild = guildDB;
-	data.user = userDB;
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+	const userData = await utils.findOrCreateUser(client, { id: message.author.id });
 
 	// Blacklist check
-	if (data.user.blacklisted) return;
+	if (userData.blacklisted) return;
 
 	// AFK thingy
-	if (userDB) {
-		if (userDB.is_afk) {
-			await client.data.removeAfk(message.author.id);
+	if (userData) {
+		if (userData.is_afk) {
+			userData.is_afk = false;
+			userData.afkReason = null;
+			await userData.save();
 			message.channel.send(Discord.Util.removeMentions('Welcome back **' + message.author.username + '**! You are no longer afk.'))
 				// eslint-disable-next-line no-unused-vars
 				.catch((error) => {
@@ -50,9 +50,9 @@ module.exports = async (client, message) => {
 	}
 
 	message.mentions.users.forEach(async (u) => {
-		const userData = await client.data.getUserDB(u.id);
-		if (userDB.is_afk) {
-			message.channel.send(`**${u.tag}** is currently afk for: **${userData.afkReason}**`)
+		const userDatas = await utils.findOrCreateUser(client, { id: u.id });
+		if (userDatas.is_afk) {
+			message.channel.send(`**${u.tag}** is currently afk for: **${userDatas.afkReason}**`)
 				// eslint-disable-next-line no-unused-vars
 				.catch((error) => {
 					return true;
@@ -61,8 +61,8 @@ module.exports = async (client, message) => {
 	});
 
 	// Chatbot thingy
-	if (data.guild) {
-		if (data.guild.chatbot_enabled && data.guild.chatbot_channel == message.channel.id) {
+	if (guildData) {
+		if (guildData.chatbot_enabled && guildData.chatbot_channel == message.channel.id) {
 			const badwords = ['nigger', 'nigga', 'nibba', 'nibber'];
 			const bl_log_channel = client.channels.cache.get('809317042058035241');
 			const reason = 'saying a blacklisted word.';
@@ -77,7 +77,7 @@ module.exports = async (client, message) => {
 				});
 			}
 
-			const channel = data.guild.chatbot_channel;
+			const channel = guildData.chatbot_channel;
 			if (!channel) return;
 			const sChannel = message.guild.channels.cache.get(channel);
 			if (sChannel.id !== message.channel.id) return;
@@ -99,7 +99,7 @@ module.exports = async (client, message) => {
 
 	// Ping Embed
 	// Get prefix from guild else get from config file
-	const prefixx = !guildDB.prefix ? config.prefix : guildDB.prefix;
+	const prefixx = !guildData.prefix ? config.prefix : guildData.prefix;
 	if (message.content.match(new RegExp(`^<@!?${client.user.id}>( |)$`))) {
 		const m = new Discord.MessageEmbed()
 			.setTitle('Hi, I\'m Nuggies !')
