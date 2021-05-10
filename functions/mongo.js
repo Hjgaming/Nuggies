@@ -506,9 +506,9 @@ module.exports = {
 			});
 			newData.save();
 			cachegoose.clearCache();
-			return 0;
+			return newData;
 		}
 		cachegoose.clearCache();
-		return db.points;
+		return db;
 	},
 };
