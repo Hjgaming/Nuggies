@@ -11,7 +11,7 @@ module.exports.run = async (client, message, args, utils) => {
 		return;
 	  }
 	});
-	index = 1; //${index += 1}.
+	index = 0;
 	mapped = await lb.leaderboard.map(
 	  (i) =>
 		`\`${index += 1}\`- **${i.points.toLocaleString()}** - ${
