@@ -6,6 +6,7 @@ const cachegoose = new GooseCache(mongoose, {
 mongoose.set('useFindAndModify', false);
 const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
+const pointsDB = require('../models/pointsSchema');
 module.exports = {
 	/**
      * @param {string} uri - Mongo Connection URI
