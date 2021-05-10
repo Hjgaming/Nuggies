@@ -511,8 +511,8 @@ module.exports = {
 		cachegoose.clearCache();
 		return db;
 	},
-	async pointsleaderboard() {
-		const leaderboard = await pointsDB.find().sort([['points', 'descending']]).exec();
-		return leaderboard.slice(0, 5);
+	async pointsleaderboard(count) {
+		const leaderboard = await pointsDB.find().sort({ points: -1 }).limit(count);
+		return { leaderboard };
 	},
 };
