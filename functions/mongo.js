@@ -500,6 +500,7 @@ module.exports = {
 		if(!id) throw new Error('id not provided');
 		const db = await pointsDB.findOne({ id: id });
 		if(!db) throw new Error('user doesnt exist');
+		cachegoose.clearCache();
 		return db.points;
 	},
 };
