@@ -2,7 +2,7 @@ require('dotenv').config();
 require('./utils/ExtendedMessage');
 const Discord = require('discord.js');
 const Nuggies = require('./utils/Nuggies');
-const client = new Nuggies({ disableMentions: 'everyone' });
+const client = new Nuggies({ disableMentions: 'everyone', intents: Discord.Intents.ALL });
 
 client.start(process.env.token, process.env.mongo);
 const unhhook = new Discord.WebhookClient(process.env.unhandled_rejection_webhook_id, process.env.command_webhook_token);

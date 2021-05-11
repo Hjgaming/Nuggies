@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
 
 module.exports.run = async (client, message, args, utils) => {
-	if(args[0] == 'test') {
+	if (args[0] == 'test') {
 		// Check message send ping.
 		const sendStart = Date.now();
 		const reply = await message.channel.send('Checking ping... `​message.edit`​');
@@ -36,9 +36,9 @@ module.exports.run = async (client, message, args, utils) => {
 **Total Latency:** ${sendPing + editPing + reactPing + deletePing} ms\n`);
 		return message.channel.send(embed);
 	}
-	else{
+	else {
 		const dataPing = Date.now();
-		await client.data.getGuildDB(message.guild.id);
+		await utils.findOrCreateGuild(client, { id: message.guild.id });
 		const dataPingNow = Date.now();
 		const dataRealPing = dataPingNow - dataPing;
 		const m = await message.channel.send(new Discord.MessageEmbed().setAuthor('🏓 Pinging....'));

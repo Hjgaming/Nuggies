@@ -1,11 +1,17 @@
 const Requirements = require('./requirements');
-const help = require('./help');
-const config = require('./config');
+const Help = require('./help');
+const Config = require('./config');
 
 class CommandOptions {
-    constructor() {
-
-    }
+	constructor({
+		help,
+		config,
+		requirements,
+	}) {
+		this.help = new Help(help);
+		this.config = new Config(config);
+		this.requirements = new Requirements(requirements);
+	}
 }
 
 module.exports = CommandOptions;

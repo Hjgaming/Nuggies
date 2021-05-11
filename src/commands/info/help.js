@@ -19,9 +19,10 @@ module.exports.config = {
 	cooldown: 1000,
 };
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	try {
-		const prefix = data.guild.prefix;
+		const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+		const prefix = guildData.prefix;
 		if (!args[0]) {
 			const a = new Discord.MessageEmbed()
 				.setTitle('Hello! I\'m Nuggies!')

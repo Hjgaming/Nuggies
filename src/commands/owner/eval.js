@@ -4,15 +4,15 @@ function clean(text) {
 	else {return text;}
 }
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	const code = args.join(' ');
-        const hasAwait = code.includes("await");
-        const hasReturn = code.includes("return");
+	const hasAwait = code.includes('await');
+	const hasReturn = code.includes('return');
 	try {
-		let evaled = hasAwait ? await eval(`(async () => { ${hasReturn ? " " : "return"} ${code} })()`) : eval(code);
-		if (typeof evaled !== "string") { 
-evaled = require("util").inspect(evaled, { depth: Number(message.content.slice(-1)) || +!(require("util").inspect(evaled, { depth: 2 }))
-});
+		let evaled = hasAwait ? await eval(`(async () => { ${hasReturn ? ' ' : 'return'} ${code} })()`) : eval(code);
+		if (typeof evaled !== 'string') {
+			evaled = require('util').inspect(evaled, { depth: Number(message.content.slice(-1)) || +!(require('util').inspect(evaled, { depth: 2 })),
+			});
 		}
 		message.channel.send(`\`\`\`xl\n${clean(evaled)}\n\`\`\``);
 	}

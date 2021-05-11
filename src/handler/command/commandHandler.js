@@ -49,27 +49,18 @@ class CommandHandler {
 	async handle(message) {
 		if (message.author.bot || !message.guild) return;
 
-		// If no cache return
-		if (!this.client.cache.guilds) return;
-
 		// Cache data
-		let guildDB;
-		if (this.client.cache.guilds) guildDB = await this.client.data.getGuildDB(message.guild.id);
-		let userDB;
-		if (this.client.cache.users) userDB = await this.client.data.getUserDB(message.author.id);
-		const data = {};
-		data.guild = guildDB;
-		data.user = userDB;
+		const guildData = await utils.findOrCreateGuild(this.client, { id: message.guild.id });
+		const userData = await utils.findOrCreateUser(this.client, { id: message.author.id });
 
 		// Blacklist check
-		if (data.user) if (data.user.blacklisted) return;
+		if (userData.blacklisted) return;
 
 		// AFK check - does not remove AFK but returns
-		if(data.user) if(data.user.is_afk) return;
+		if (userData.is_afk) return;
 
 		// Prefix
-		let prefixx;
-		if (this.client.cache.guilds) prefixx = !guildDB.prefix ? config.prefix : guildDB.prefix;
+		const prefixx = !guildData.prefix ? config.prefix : guildData.prefix;
 		const prefixMention = new RegExp(`^<@!?${this.client.user.id}> `);
 		const prefix = message.content.match(prefixMention) ? message.content.match(prefixMention)[0] : prefixx;
 
@@ -87,31 +78,31 @@ class CommandHandler {
 
 		const commandFile = this.client.commands.get(command);
 		if (!commandFile) return;
-		const category = this.client.commands.get(command).config.category.toLowerCase();
-		if (data.guild.category.length) {
-			if (data.guild.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
+		const category = commandFile.config.category.toLowerCase();
+		if (guildData.category) {
+			if (guildData.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
 		}
-		if (data.guild.length) {
-			if (data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
+		if (guildData.commands) {
+			if (guildData.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));
 		}
 		// if(this.client.commands.get(command).config.category === 'Actions') return message.channel.send('due to some difficulties, Actions commands are disabled for atleast a day, please join discord.gg/d98jT3mgxf for updates (we also do premium giveaways)');
-		if (commandFile.config.developers == true) {
-			if (data.user.developer == false) {
+		if (commandFile.config.developers) {
+			if (!userData.developer) {
 				return utils.errorEmbed(message, ':warning: This command is restricted only to bot owners.');
 			}
 		}
 
-		if (commandFile.config.restricted == true) {
-			if (data.user.moderator == false) {
+		if (commandFile.config.restricted) {
+			if (!userData.moderator) {
 				return utils.errorEmbed(message, ':warning: This command is restricted only to bot moderators / owners.');
 			}
 		}
 
-		if (commandFile.config.disable == true) {
+		if (commandFile.config.disable) {
 			return utils.errorEmbed(message, ':warning: This command is disabled for a short period of time! :warning:');
 		}
 
-		if (commandFile.config.args == true) {
+		if (commandFile.config.args) {
 			if (!args[0]) {
 				return utils.errorEmbed(message, `Invalid arguments. Use: ${prefix + 'help ' + this.client.commands.get(command).help.name}`);
 			}
@@ -124,7 +115,8 @@ class CommandHandler {
 
 		const timestamps = this.client.cooldowns.get(command);
 		if (timestamps.has(message.author.id)) {
-			if (data.user.premium == true) {
+			const user = await utils.findOrCreateUser(this.client, { id: message.author.id });
+			if (user.premium == true) {
 				const expirationTime = timestamps.get(message.author.id) + pcooldown;
 				if (Date.now() < expirationTime) {
 					const timeLeft = utils.timer(expirationTime);
@@ -151,7 +143,7 @@ class CommandHandler {
 			await timestamps.set(message.author.id, Date.now());
 			setTimeout(
 				async () => await timestamps.delete(message.author.id), cooldown);
-			await commandFile.run(this.client, message, args, utils, data);
+			await commandFile.run(this.client, message, args, utils);
 		}
 		catch (error) {
 			// Command Errors

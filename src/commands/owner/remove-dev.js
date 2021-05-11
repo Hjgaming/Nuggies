@@ -32,7 +32,9 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 
-	const fetch = await client.data.getUserDB(target.id);
+	const fetch = await utils.findOrCreateUser(client, { id: target.id });
+	fetch.developer = false;
+	fetch.save();
 
 	if (fetch.developer) {
 		await client.data.developer(target.id, 'false');
