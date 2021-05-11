@@ -12,7 +12,8 @@ module.exports.run = async (client, message, args, utils) => {
 			return;
 		}
 	});
-	let index = 1; // ${index += 1}.
+	// ${index += 1}.
+	let index = 0;
 	const mapped = await lb.leaderboard.map(
 		(i) =>
 			`\`${index += 1}\`- **${i.points.toLocaleString()}** - ${
@@ -31,7 +32,7 @@ module.exports.run = async (client, message, args, utils) => {
 };
 
 module.exports.help = {
-	aliases: [],
+	aliases: ['lb'],
 	name: 'leaderboard',
 	description: 'check the leaderboard',
 	usage: '.leaderboard',
@@ -41,5 +42,5 @@ module.exports.config = {
 	restricted: false,
 	category: 'Utility',
 	disable: false,
-	cooldown: 1000 * 60,
+	cooldown: 1000 * 10,
 };
