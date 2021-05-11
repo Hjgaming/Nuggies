@@ -1,19 +1,49 @@
-# Nuggies
-## Nuggies is a compact and easy to use multipurpose discord bot with loads of commands and features like automeme, moderation, actions, information, fun, chatbot and more!
-<br> <br>
-> ## ```how to run the bot?``` <br>
-<br>
+# Nuggies <img src = "https://cdn.discordapp.com/emojis/784276668168273921.png?v=1" width = "45">
+Nuggies is a compact and easy to use multipurpose discord bot with loads of commands and features like automeme, moderation, actions, information, fun, chatbot and more!
+You can invite Nuggies by clicking [here](https://top.gg/bot/779741162465525790/invite)!
 
-### 1. make a .env file from .env.example
-### 2. get the tokens from the following websites:
-- [monkedev](https://monkedev.com/api)
-- [otakugifs](https://otakugifs.xyz)
-- [mongodb](https://www.mongodb.com/)
-- [dbl](https://top.gg) (only do this if you have a bot on top.gg)
-- [bot token](https://discord.com/developers/applications) <br>
-and paste it in the .env
-### 3. install the dependencies using `npm install`
-### 4. run the `node index.js` command
-<br>
 
-# make sure to invite Nuggies by clicking [here](https://top.gg/bot/779741162465525790/invite)
+# How To Run The Bot? <img src = "https://cdn.discordapp.com/emojis/835527258957152287.png?v=1" width = "40">
+
+1. Clone the repository
+```cmd
+git clone https://github.com/Nuggies-bot/Nuggies
+(or)
+gh repo clone Nuggies-bot/Nuggies
+```
+2. Make a .env file from <a href = "https://github.com/Nuggies-bot/Nuggies/blob/main/.env.example">.env.example </a> <br><br>
+
+3. Get the tokens from the following websites: <br>
+- [monkedev](https://monkedev.com/api)<br>
+- [otakugifs](https://otakugifs.xyz)<br>
+- [mongodb](https://www.mongodb.com/)<br>
+- [dbl](https://top.gg) (only do this if you have a bot on top.gg)<br>
+- [bot token](https://discord.com/developers/applications) <br><br>
+
+  Get 4 webhooks for these purposes: <br>
+- command logging <br>
+- restart/ready logs <br>
+- err logs <br>
+- unhandled rejections logs <br><br>
+
+4. Paste the tokens and webhooks ids and tokens into the `.env`. Check out <a href = "https://github.com/Nuggies-bot/Nuggies/blob/main/.env.example"> `.example.env` </a> for more! <br><br>
+5. After doing the above, run the following commands on the command line :
+```cmd
+npm install
+node index.js
+```
+# Hosting
+Nuggies is hosted on digital ocean. If you would like to host your bot on digital ocean you can use the free 100$ credit by pressing the button bellow! Nuggies is hosted on one of their linux droplets. 
+
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%203.svg)](https://www.digitalocean.com/?refcode=29a548a31a41&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+
+# Reporting Bugs/issues <img src = "https://cdn.discordapp.com/emojis/785064792775720980.png?v=1" width = "40">
+
+
+You can report bugs or issues by opening a issue in the github repository or by joining the [support server](https://discord.gg/AUHYW4J6GT).
+
+
+# Support <img src = "https://cdn.discordapp.com/emojis/785065330526912563.png?v=1" width = 40>
+
+
+If you encounter any problems please join the [support server](https://discord.gg/AUHYW4J6GT) and we will be ready to help!

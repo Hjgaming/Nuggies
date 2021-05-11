@@ -15,7 +15,9 @@ module.exports.run = async (client, message, args, utils) => {
 			.addField('Vote Count', random.vote_count, true)
 			.addField('Original Language', random.original_language)
 			.addField('Release Date', random.first_air_date || random.release_date)
-			.setImage(`https://image.tmdb.org/t/p/w500${random.poster_path}` || `https://image.tmdb.org/t/p/w500${random.backdrop_path}`);
+			.setImage(`https://image.tmdb.org/t/p/w500${random.poster_path}` || `https://image.tmdb.org/t/p/w500${random.backdrop_path}`)
+			.setColor('RANDOM')
+			.setAuthor(message.author.username, message.author.displayAvatarURL());
 		message.channel.send(embed);
 	}).catch(err => message.channel.send(err));
 };
@@ -31,7 +33,7 @@ module.exports.help = {
 module.exports.config = {
 	args: false,
 	restricted: false,
-	category: 'Information',
+	category: 'Info',
 	disable: false,
 	cooldown: 1000,
 };

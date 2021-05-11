@@ -6,7 +6,7 @@ const cachegoose = new GooseCache(mongoose, {
 mongoose.set('useFindAndModify', false);
 const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
-
+const pointsDB = require('../models/pointsSchema');
 module.exports = {
 	/**
      * @param {string} uri - Mongo Connection URI
@@ -23,7 +23,7 @@ module.exports = {
      */
 	async getGuildDB(guildID) {
 		if (!guildID) throw new Error('Please Provide a Guild ID');
-		const guild = await guildsDB.findOne({ id: guildID }).cache(60);
+		const guild = await guildsDB.findOne({ id: guildID }).lean().cache(120);
 		if (!guild) {
 			const newG = new guildsDB({ id: guildID });
 			const {
@@ -35,6 +35,8 @@ module.exports = {
 				automeme_channel,
 				mute_role,
 				premium,
+				category,
+				commands,
 			} = newG;
 			await newG.save().catch(error => console.log(error));
 			return {
@@ -46,6 +48,8 @@ module.exports = {
 				automeme_channel,
 				mute_role,
 				premium,
+				category,
+				commands,
 			};
 		}
 		else {
@@ -57,6 +61,8 @@ module.exports = {
 			const automeme_channel = guild.automeme_channel;
 			const mute_role = guild.mute_role;
 			const premium = guild.premium;
+			const category = guild.category;
+			const commands = guild.commands;
 			return {
 				prefix,
 				registeredAt,
@@ -66,6 +72,8 @@ module.exports = {
 				automeme_channel,
 				mute_role,
 				premium,
+				category,
+				commands,
 			};
 		}
 	},
@@ -74,7 +82,7 @@ module.exports = {
    */
 	async getUserDB(userID) {
 		if (!userID) throw new Error('Please Provide a User ID');
-		const user = await usersDB.findOne({ id: userID }).cache(60);
+		const user = await usersDB.findOne({ id: userID }).lean().cache(120);
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
 			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator } = newUs;
@@ -417,16 +425,16 @@ module.exports = {
 	* @param {string} toggle - premium toggle
 	*/
 	async pushguild(user, guildID, method) {
-		if(!method) return new Error('please provide a method');
+		if (!method) return new Error('please provide a method');
 		usersDB.findOne({ id: user }, async (err, data) => {
-			if(err) throw err;
-			if(!data) return new Error('user not found.');
-			if(method === 'push') {
+			if (err) throw err;
+			if (!data) return new Error('user not found.');
+			if (method === 'push') {
 				await data.premiumservers.push(guildID);
 				await data.save().catch(error => console.log(error));
 				data.save();
 			}
-			if(method === 'splice') {
+			if (method === 'splice') {
 				const index = data.premiumservers.indexOf(guildID);
 				data.premiumservers.splice(index, 1);
 				data.save();
@@ -434,5 +442,77 @@ module.exports = {
 			cachegoose.clearCache();
 			return { user };
 		});
+	},
+	async adddisable(id, name, type) {
+		if(!name) throw new Error('name not provided!');
+		if(!type) throw new Error('type not provided!');
+		if(!id) throw new Error('id not provided!');
+
+		if (type === 'category') {
+			const db = await guildsDB.findOne({ id: id });
+			if (!db) {
+				const newdoc = await new guildsDB({ id: id });
+				await newdoc.save().catch(error => console.log(error));
+			}
+			await db.category.push(name);
+			await db.save().catch(e => console.log(e));
+		}
+		if (type === 'command') {
+			const db = await guildsDB.findOne({ id: id });
+			if (!db) {
+				const newdoc = await new guildsDB({ id: id });
+				await newdoc.save().catch(error => console.log(error));
+			}
+			await db.commands.push(name);
+			await db.save().catch(e => console.log(e));
+		}
+		cachegoose.clearCache();
+		return { name };
+	},
+
+	async removedisable(id, name, type) {
+		if (!id) throw new Error('id not provided');
+		if (!name) throw new Error('name not provided');
+		if (!type) throw new Error('type not provided');
+		if (type === 'category') {
+			const db = await guildsDB.findOne({ id: id });
+			if (!db) {
+				return false;
+			}
+			const index = db.category.indexOf(name.toLowerCase());
+			await db.category.splice(index, 1);
+			await db.save().catch(e => console.log(e));
+		}
+		if (type === 'command') {
+			const db = await guildsDB.findOne({ id: id });
+			if (!db) {
+				return false;
+			}
+			const index = db.commands.indexOf(name);
+			await db.commands.splice(index, 1);
+			await db.save().catch(e => console.log(e));
+		}
+		cachegoose.clearCache();
+		return true;
+
+	},
+	async returnpoints(id) {
+		if(!id) throw new Error('id not provided');
+		const db = await pointsDB.findOne({ id: id });
+		if(!db) {
+			const newData = new pointsDB({
+				id: id,
+				points: 0,
+			});
+			newData.save();
+			cachegoose.clearCache();
+			return newData;
+		}
+		cachegoose.clearCache();
+		return db;
+	},
+	async pointsleaderboard(count) {
+		const leaderboard = await pointsDB.find().sort({ points: -1 }).limit(count);
+		return { leaderboard };
 	},
 };

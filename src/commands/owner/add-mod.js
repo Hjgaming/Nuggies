@@ -6,7 +6,7 @@ const user = require('../../../models/users');
 module.exports.run = async (client, message, args) => {
 	const target = message.mentions.members.first() || message.guild.members.cache.find((m) => m.user.id === args[0] || m.user.tag.startsWith(args[0]) || m.displayName.startsWith(args[0]));
 
-	const superMods = ['555064829946232832', '734006373343297557', '460078206326800434'];
+	const superMods = ['555064829946232832', '833713876628406363', '460078206326800434'];
 	if(!superMods.includes(message.author.id)) {
 		return message.channel.send(
 			new Discord.MessageEmbed()
@@ -32,7 +32,7 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 
-	const fetch = await client.data.getUserDB(target.id);
+	const fetch = await utils.findOrCreateUser(client, { id: target.id });
 
 	if (fetch.moderator) {
 		return message.channel.send(
@@ -43,7 +43,8 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 	else {
-		await client.data.moderator(target.id, 'true');
+		fetch.moderator = true;
+		fetch.save();
 
 		message.channel.send(
 			new Discord.MessageEmbed()
@@ -70,7 +71,7 @@ module.exports.help = {
 	aliases: ['a-m'],
 	name: 'add-mod',
 	description: 'Add a moderator to the permissions array',
-	usage: config.prefix + 'add-dev <id>',
+	usage: config.prefix + 'add-mod <id>',
 };
 
 module.exports.config = {
