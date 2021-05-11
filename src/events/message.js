@@ -50,8 +50,8 @@ module.exports = async (client, message) => {
 	}
 
 	message.mentions.users.forEach(async (u) => {
-		const userDatas =  await client.findOrCreateUser({ id: u.id });
-		if (userData.is_afk) {
+		const userDatas = await utils.findOrCreateUser(client, { id: u.id });
+		if (userDatas.is_afk) {
 			message.channel.send(`**${u.tag}** is currently afk for: **${userDatas.afkReason}**`)
 				// eslint-disable-next-line no-unused-vars
 				.catch((error) => {

@@ -24,9 +24,9 @@ module.exports.run = async (client, message, args, utils) => {
 		const categoryArray = fs.readdirSync('src/commands');
 		if(!categoryArray.includes(args[1].toLowerCase())) return message.channel.send(new Discord.MessageEmbed().setTitle('Error!').setDescription(`category **${args[1]}** not found!`));
 		if(categoryArray.includes(args[1].toLowerCase())) {
-		const index = guildData.category.indexOf(args[1].toLowerCase());
-		const check = await guildData.category.splice(index, 1);
-		guildData.save();
+			const index = guildData.category.indexOf(args[1].toLowerCase());
+			const check = await guildData.category.splice(index, 1);
+			guildData.save();
 			console.log(check);
 			if(check == true) {
 				const i = categoryArray.indexOf(args[1].toLowerCase());

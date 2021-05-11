@@ -115,7 +115,8 @@ class CommandHandler {
 
 		const timestamps = this.client.cooldowns.get(command);
 		if (timestamps.has(message.author.id)) {
-			if (data.user.premium == true) {
+			const user = utils.findOrCreateUser(this.client, { id: message.author.id });
+			if (user.premium == true) {
 				const expirationTime = timestamps.get(message.author.id) + pcooldown;
 				if (Date.now() < expirationTime) {
 					const timeLeft = utils.timer(expirationTime);

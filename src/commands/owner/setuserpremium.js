@@ -8,14 +8,15 @@ module.exports.run = async (client, message, args, utils) => {
 	if(!target) return message.channel.send(new Discord.MessageEmbed().setTitle('Error').setDescription('Please provide a user!').setColor('RED'));
 	const tier = args[1];
 	const checkUser = await client.users.fetch(target);
-	if (checkUser) const userData = await utils.findOrCreateUser(client, { id: target });
-	if (!checkUser) return message.channel.send(new Discord.MessageEmbed().setTitle(':warning: Error').setDescription(`${target} is not a valid user id. Not even sure what you're on about`,).setColor('RED'));
+	let userData;
+	if (checkUser) userData = await utils.findOrCreateUser(client, { id: target });
+	if (!checkUser) return message.channel.send(new Discord.MessageEmbed().setTitle(':warning: Error').setDescription(`${target} is not a valid user id. Not even sure what you're on about`).setColor('RED'));
 
-		userData.tier = tier;
-		userData.premium = true;
-		userData.save();
-		message.channel.send(new Discord.MessageEmbed().setTitle('Success!').setDescription(`premium set to \`tier ${tier}\` for **${client.users.cache.get(target).tag}** `).setColor('GREEN'));
-		client.channels.cache.get('828996803855777882').send(new Discord.MessageEmbed().setTitle(`Premium tier ${tier} added to ${client.users.cache.get(target).username}`).setColor('GREEN'));
+	userData.tier = tier;
+	userData.premium = true;
+	userData.save();
+	message.channel.send(new Discord.MessageEmbed().setTitle('Success!').setDescription(`premium set to \`tier ${tier}\` for **${client.users.cache.get(target).tag}** `).setColor('GREEN'));
+	client.channels.cache.get('828996803855777882').send(new Discord.MessageEmbed().setTitle(`Premium tier ${tier} added to ${client.users.cache.get(target).username}`).setColor('GREEN'));
 };
 module.exports.help = {
 	aliases: ['setuserp', 'userp'],

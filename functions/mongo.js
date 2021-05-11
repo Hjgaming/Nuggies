@@ -6,6 +6,7 @@ const cachegoose = new GooseCache(mongoose, {
 mongoose.set('useFindAndModify', false);
 const usersDB = require('../models/users');
 const guildsDB = require('../models/guilds');
+const pointsDB = require('../models/pointsSchema');
 module.exports = {
 	/**
      * @param {string} uri - Mongo Connection URI
@@ -494,5 +495,24 @@ module.exports = {
 		cachegoose.clearCache();
 		return true;
 
+	},
+	async returnpoints(id) {
+		if(!id) throw new Error('id not provided');
+		const db = await pointsDB.findOne({ id: id });
+		if(!db) {
+			const newData = new pointsDB({
+				id: id,
+				points: 0,
+			});
+			newData.save();
+			cachegoose.clearCache();
+			return newData;
+		}
+		cachegoose.clearCache();
+		return db;
+	},
+	async pointsleaderboard(count) {
+		const leaderboard = await pointsDB.find().sort({ points: -1 }).limit(count);
+		return { leaderboard };
 	},
 };
