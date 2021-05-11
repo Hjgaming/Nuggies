@@ -115,7 +115,7 @@ class CommandHandler {
 
 		const timestamps = this.client.cooldowns.get(command);
 		if (timestamps.has(message.author.id)) {
-			const user = utils.findOrCreateUser(this.client, { id: message.author.id });
+			const user = await utils.findOrCreateUser(this.client, { id: message.author.id });
 			if (user.premium == true) {
 				const expirationTime = timestamps.get(message.author.id) + pcooldown;
 				if (Date.now() < expirationTime) {
