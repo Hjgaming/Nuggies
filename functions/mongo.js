@@ -518,7 +518,7 @@ module.exports = {
 	async addpoints(user, amount) {
 		if(!user) throw new Error('user not provided');
 		if(!amount) throw new Error('amount not provided');
-		if(typeof amount !== Number) throw new Error('amount provided should be a number');
+		// if(typeof amount !== Number) throw new Error('amount provided should be a number');
 		const data = await pointsDB.findOne({ id: user });
 		if(!data) {
 			const newdata = pointsDB({
@@ -531,6 +531,27 @@ module.exports = {
 		}
 		if(data) {
 			data.points + amount;
+			data.save();
+			cachegoose.clearCache();
+			return true;
+		}
+	},
+	async removepoints(user, amount) {
+		if(!user) throw new Error('user not provided');
+		if(!amount) throw new Error('amount not provided');
+		// if(typeof amount !== Number) throw new Error('amount provided should be a number');
+		const data = await pointsDB.findOne({ id: user });
+		if(!data) {
+			const newdata = pointsDB({
+				id: user,
+				points: amount,
+			});
+			newdata.save();
+			cachegoose.clearCache();
+			return true;
+		}
+		if(data) {
+			data.points - amount;
 			data.save();
 			cachegoose.clearCache();
 			return true;
