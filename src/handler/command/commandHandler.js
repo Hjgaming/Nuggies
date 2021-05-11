@@ -10,7 +10,6 @@ const utils = require('../../../utils/utils');
 class CommandHandler {
 
 	/**
-	 *
 	 * @param {Discord.Client} client
 	 * @param {String} prefix
 	 */
@@ -83,7 +82,7 @@ class CommandHandler {
 		if (!commandFile) return;
 		const category = commandFile.config.category.toLowerCase();
 		if (data.guild.category) {
-			if (data.guild.category.includes(category)) return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
+			if (data.guild.category.includes(category) && commandFile.help.name !== 'disable') return message.channel.send(new Discord.MessageEmbed().setTitle('This category is disabled.').setDescription(`category **${category}** is disabled in **${message.guild.name}**`).setColor('RED'));
 		}
 		if (data.guild.commands) {
 			if (data.guild.commands.includes(command)) return message.channel.send(new Discord.MessageEmbed().setTitle('This command is disabled.').setDescription(`command **${command}** is disabled in **${message.guild.name}**`).setColor('RED'));

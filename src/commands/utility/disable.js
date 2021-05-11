@@ -11,6 +11,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 			command = client.commands.get(client.aliases.get(command)).help.name;
 		}
 		if(!command) return message.channel.send(new Discord.MessageEmbed().setTitle('Error!').setDescription(`command **${command}** not found!`).setColor('RED'));
+		if(command == 'disable') return message.channel.send('You cannot disable the disable command!');
 		client.data.adddisable(message.guild.id, command, 'command');
 		message.channel.send(new Discord.MessageEmbed().setTitle('Disabled').setDescription(`**${command}** command has been disabled in ${message.guild.name}!`).setColor('GREEN'));
 	}
@@ -21,7 +22,6 @@ module.exports.run = async (client, message, args, utils, data) => {
 			client.data.adddisable(message.guild.id, args[1].toLowerCase(), 'category');
 			const i = categoryArray.indexOf(args[1].toLowerCase());
 			message.channel.send(new Discord.MessageEmbed().setTitle('Disabled').setDescription(`**${categoryArray[i]}** category has been disabled!`).setColor('GREEN'));
-
 		}
 	}
 };

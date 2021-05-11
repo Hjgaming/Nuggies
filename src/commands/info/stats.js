@@ -34,7 +34,6 @@ module.exports.run = async (client, message, args, utils, data) => {
 	if(serverPrefix !== null) Prefix = serverPrefix;
 	if(serverPrefix == null) Prefix = globalprefix;
 	osutils.cpuUsage(function(v) {
-		console.log(config.owners);
 		const embed = new Discord.MessageEmbed()
 			.setColor(0x7289DA)
 			.setThumbnail(client.user.avatarURL({ format: 'png', dynamic: true, size: 2048 }))

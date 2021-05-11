@@ -77,7 +77,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 			}
 		}
 	}
-	catch(err) {
+	catch (err) {
 		console.log(err);
 	}
 };
