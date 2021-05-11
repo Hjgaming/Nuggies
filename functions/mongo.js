@@ -515,4 +515,24 @@ module.exports = {
 		const leaderboard = await pointsDB.find().sort({ points: -1 }).limit(count);
 		return { leaderboard };
 	},
+	async addpoints(user, amount) {
+		if(!user) throw new Error('user not provided');
+		if(!amount) throw new Error('amount not provided');
+		const data = await pointsDB.findOne({ id: user });
+		if(!data) {
+			const newdata = pointsDB({
+				id: user,
+				points: amount,
+			});
+			newdata.save();
+			cachegoose.clearCache();
+			return true;
+		}
+		if(data) {
+			data.points + amount;
+			data.save();
+			cachegoose.clearCache();
+			return true;
+		}
+	},
 };
