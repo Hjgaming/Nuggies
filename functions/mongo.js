@@ -530,7 +530,7 @@ module.exports = {
 			return true;
 		}
 		if(data) {
-			data.points + amount;
+			data.points = data.points + amount;
 			data.save();
 			cachegoose.clearCache();
 			return true;
@@ -551,7 +551,7 @@ module.exports = {
 			return true;
 		}
 		if(data) {
-			data.points - amount;
+			data.points = data.points - amount;
 			data.save();
 			cachegoose.clearCache();
 			return true;
