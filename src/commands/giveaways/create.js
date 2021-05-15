@@ -9,9 +9,12 @@ module.exports.run = async (client, message, args) => {
 	const time = ms(args[1]);
 	const prize = args.slice(2).join(' ');
 
-	giveaways.create({
+	await giveaways.create({
 		message: message, prize: prize, hoster: hoster, winners: winners, endAt: Date.now() + time,
 	});
+	await giveaways.startTimer();
+
+	await message.channel.send('Created a giveaway!').then(m => setTimeout(() => m.delete(), 2000));
 };
 
 module.exports.help = {
