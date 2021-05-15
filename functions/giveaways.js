@@ -21,14 +21,16 @@ module.exports = {
 	},
 
 	async startTimer(message, data) {
-		const msg = message.guild.channels.cache.get(data.channelID).messages.fetch(data.messageID);
+		const msg = await message.guild.channels.cache.get(data.channelID).messages.fetch(data.messageID);
+		await msg.fetch();
+		const time = data.endAt - Date.now();
 		setTimeout(async () => {
-			const reaction = msg.reactions.cache.get('🎉') || msg.reactions.cache.get('843076397345144863');
-			const reacts = await reaction.users.fetch({ limit: Infinity });
-			const winners = await this.choose(reacts, data.winners);
+			const reaction = await msg.reactions.cache.get('🎉') || msg.reactions.cache.get('843076397345144863');
+			const reacts = await reaction.users.fetch({ limit: 100 });
+			const winners = await this.choose(reacts.filter(x => !x.bot), data.winners);
 
-			message.channel.send(`${winners.map(winner => winner.toString()).join(', ')} you won ${data.prize} Congratulations! Hosted by ${message.guild.members.cache.get(data.hoster).toString()}`, { allowedMentions: { roles: [], users: [], parse: [] } });
-		}, Date.now() - data.endAt);
+			message.channel.send(`${winners.map(winner => winner.toString()).join(', ')} you won ${data.prize} Congratulations! Hosted by ${message.guild.members.cache.get(data.hoster).toString()}`, { allowedMentions: { roles: [], users: winners.map(x => x.id), parse: [] } });
+		}, time);
 	},
 
 	async getByGuildID(guildID) {

@@ -8,7 +8,8 @@ module.exports.run = async (client, message, args) => {
 	const embed = new Discord.MessageEmbed()
 		.setTitle(`Giveaways in ${message.guild.name}!`)
 		.setDescription(`${gws.map(async (x, i) =>
-			`\`${i}.\` Prize: **${x.prize}** - Hosted By: ${message.guild.members.cache.get(x.hoster) || await message.guild.members.fetch(x.hoster).catch() || client.users.cache.get(x.hoster) || `<@!${x.hoster}>`}\nChannel: <#${x.channelID}> - Winners: ${x.winners}`).join('\n')}`);
+			`\`${i}.\` Prize: **${x.prize}** - Hosted By: ${message.guild.members.cache.get(x.hoster) || await message.guild.members.fetch(x.hoster).catch() || client.users.cache.get(x.hoster) || `<@!${x.hoster}>`}\nChannel: <#${x.channelID}> - Winners: ${x.winners}`,
+		).join('\n')}`);
 	message.channel.send(embed);
 };
 
