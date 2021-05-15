@@ -60,7 +60,7 @@ class CommandHandler {
 		if (userData.is_afk) return;
 
 		// Prefix
-		const prefixx = !guildData.prefix ? config.prefix : guildData.prefix;
+		const prefixx = '...' //!guildData.prefix ? config.prefix : guildData.prefix;
 		const prefixMention = new RegExp(`^<@!?${this.client.user.id}> `);
 		const prefix = message.content.match(prefixMention) ? message.content.match(prefixMention)[0] : prefixx;
 

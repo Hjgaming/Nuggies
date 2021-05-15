@@ -13,7 +13,10 @@ const schema = new mongoose.Schema({
 	hoster: {
 		type: String, required: true,
 	},
-	time: {
+	endAt: {
+		type: Date, required: true,
+	},
+	startAt: {
 		type: Date, required: true,
 	},
 	prize: {

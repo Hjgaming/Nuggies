@@ -19,13 +19,13 @@ module.exports.errorEmbed = function(message, errorMessage) {
 
 module.exports.quickEmbed = function(message, content, color) {
 	const quickEmbed = new Discord.MessageEmbed();
-	if(color) quickEmbed.setColor(color);
+	if (color) quickEmbed.setColor(color);
 	quickEmbed.setDescription(content);
 	message.channel.send({ embed: quickEmbed });
 };
 
 module.exports.selectRandom = function(array) {
-	if(typeof array !== 'object') return;
+	if (typeof array !== 'object') return;
 	return array[Math.floor((Math.random() * array.length) + 0)];
 };
 
@@ -64,7 +64,7 @@ module.exports.findOrCreateUser = async function(client, { id: userID }, isLean)
 	}
 };
 
-module.exports.findOrCreateGuild = 	async function(client, { id: guildID }, isLean) {
+module.exports.findOrCreateGuild = async function(client, { id: guildID }, isLean) {
 	if (client.dbCache.guilds.get(guildID)) {
 		return isLean ? client.dbCache.guilds.get(guildID).toJSON() : client.dbCache.guilds.get(guildID);
 	}
@@ -81,4 +81,15 @@ module.exports.findOrCreateGuild = 	async function(client, { id: guildID }, isLe
 			return isLean ? guildData.toJSON() : guildData;
 		}
 	}
+};
+
+module.exports.giveawayEmbed = async function(client, { hoster, prize, endAt, winners }) {
+	const host = client.users.cache.get(hoster) || await client.users.fetch(hoster).catch();
+	const embed = new Discord.MessageEmbed()
+		.setTitle('Giveaway! <:blurpletada:843076397345144863>')
+		.setDescription(`**React with <:blurpletada:843076397345144863> to enter the giveaway!**\nPrize: **\`${prize}\`**\nHosted by: ${host.toString()}\nWinner(s): \`${winners}\``)
+		.setColor('RANDOM')
+		.setFooter('Ends', 'https://cdn.discordapp.com/emojis/843076397345144863.png?v=1')
+		.setTimestamp(endAt);
+	return embed;
 };
