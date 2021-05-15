@@ -18,7 +18,36 @@ module.exports = {
 		msg.react(message.client.emojis.cache.get('843076397345144863') || '🎉');
 	},
 
-	async get(guildID) {
+	async getByGuildID(guildID) {
 		const docs = await schema.find({ guildID: guildID });
+
+		if(!docs[0]) return;
+		return docs;
+	},
+
+	async getByMessageID(messageID) {
+		const doc = await schema.findOne({ messageID: messageID });
+
+		if(!doc) return;
+		return doc;
+	},
+
+	async getByChannelID(channelID) {
+		const docs = await schema.find({ channelID: channelID });
+
+		if(!docs[0]) return;
+		return docs;
+	},
+
+	async reroll(messageID) {
+		// Later...
+	},
+
+	async choose() {
+		// Later....
+	},
+
+	async end(messageID) {
+		// Later...
 	},
 };
