@@ -87,7 +87,7 @@ module.exports.giveawayEmbed = async function(client, { hoster, prize, endAt, wi
 	const host = client.users.cache.get(hoster) || await client.users.fetch(hoster).catch();
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Giveaway! <:blurpletada:843076397345144863>')
-		.setDescription(`**React with <:blurpletada:843076397345144863> to enter the giveaway!**\nPrize: **\`${prize}\`**\nHosted by: ${host.toString()}\nWinner(s): \`${winners}\``)
+		.setDescription(`**React with <:blurpletada:843076397345144863> to enter the giveaway!**\n🎁 Prize: **${prize}**\n🎊 Hosted by: ${host.toString()}\n⏲️ Winner(s): \`${winners}\``)
 		.setColor('RANDOM')
 		.setFooter('Ends', 'https://cdn.discordapp.com/emojis/843076397345144863.png?v=1')
 		.setTimestamp(endAt);
