@@ -17,7 +17,7 @@ module.exports = {
 			endAt: endAt,
 		}).save();
 		msg.react(message.client.emojis.cache.get('843076397345144863') || '🎉');
-		this.startTimer(message, data);
+		await this.startTimer(message, data);
 	},
 
 	async startTimer(message, data) {
@@ -25,7 +25,7 @@ module.exports = {
 		setTimeout(async () => {
 			const reaction = msg.reactions.cache.get('🎉') || msg.reactions.cache.get('843076397345144863');
 			const reacts = await reaction.users.fetch({ limit: Infinity });
-			const winners = this.choose(reacts, data.winners);
+			const winners = await this.choose(reacts, data.winners);
 
 			message.channel.send(`${winners.map(winner => winner.toString()).join(', ')} you won ${data.prize} Congratulations! Hosted by ${message.guild.members.cache.get(data.hoster).toString()}`, { allowedMentions: { roles: [], users: [], parse: [] } });
 		}, Date.now() - data.endAt);
@@ -52,12 +52,22 @@ module.exports = {
 		return docs;
 	},
 
-	async reroll(messageID) {
-		// Later...
+	async reroll(client, messageID) {
+		const data = await this.getByMessageID(messageID);
+		const msg = client.guilds.cache.get(data.guildID).channels.cache.get(data.channelID).messages.fetch(messageID);
+		const reaction = msg.reactions.cache.get('🎉');
+		const reacts = await reaction.users.fetch({ limit: Infinity });
+		return await this.choose(reacts, 1);
 	},
 
 	async choose(reactions, winners) {
-		// Later....
+		const final = [];
+		for (let i = 0; i < winners; i++) {
+			const win = reactions.random();
+			reactions = reactions.filter(user => user.id !== win.id);
+			final.push(win);
+		}
+		return final;
 	},
 
 	async end(messageID) {

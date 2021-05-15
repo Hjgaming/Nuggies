@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const giveaways = require('../../../functions/giveaways');
 
 module.exports.run = async (client, message, args) => {
-
+	await giveaways.end();
 };
 
 module.exports.help = {
