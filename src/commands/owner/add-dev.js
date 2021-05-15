@@ -4,9 +4,9 @@ const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
 const user = require('../../../models/users');
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args, utils) => {
 	const target = message.mentions.members.first() || message.guild.members.cache.find((m) => m.user.id === args[0] || m.user.tag.startsWith(args[0]) || m.displayName.startsWith(args[0]));
-	const superMods = ['555064829946232832', '734006373343297557', '460078206326800434'];
+	const superMods = ['555064829946232832', '833713876628406363', '460078206326800434'];
 	if(!superMods.includes(message.author.id)) {
 		return message.channel.send(new Discord.MessageEmbed().setTitle(':warning: Failed').setDescription('You do not have enough privileges to execute this command').setColor('RED'));
 	}
@@ -18,13 +18,14 @@ module.exports.run = async (client, message, args) => {
 		);
 	}
 
-	const fetch = await client.data.getUserDB(target.id);
+	const fetch = await utils.findOrCreateUser(client, { id: target.id });
 	if (fetch.developer) {
 		return message.channel.send(new Discord.MessageEmbed().setTitle(':warning: Error').setDescription('This user already has developer permissions').setColor('RED'),
 		);
 	}
 	else {
-		await client.data.developer(target.id, 'true');
+		fetch.developer = true;
+		fetch.save();
 
 		message.channel.send(new Discord.MessageEmbed().setTitle('<a:9689_tick:785181267758809120> Success!').setDescription(`**<@${target.id}>** was successfully given developer permissions`).setColor('GREEN'));
 		message.guild.members.cache.get(target.id).send(new Discord.MessageEmbed().setTitle(':warning: Alert').setDescription(`You were granted developer permissions by **${message.author.tag}** for **Nuggies**`).setColor('GREEN'));

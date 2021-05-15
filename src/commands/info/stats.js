@@ -8,7 +8,7 @@ const fs = require('fs');
 const config = require('../../../utils/config.json');
 const settings = require('../../../utils/config.json');
 
-module.exports.run = async (client, message, args, utils, data) => {
+module.exports.run = async (client, message, args, utils) => {
 	let totalUsers = 0;
 	function sum() {
 		client.guilds.cache.forEach(guild => {
@@ -28,12 +28,14 @@ module.exports.run = async (client, message, args, utils, data) => {
 	minutes = (minutes < 10) ? '0' + minutes : minutes;
 	seconds = (seconds < 10) ? '0' + seconds : seconds;
 	const globalprefix = settings.prefix;
-	const serverPrefix = data.guild.prefix;
+	const guildData = await utils.findOrCreateGuild(client, { id: message.guild.id });
+	const serverPrefix = guildData.prefix;
 
 	let Prefix;
 	if(serverPrefix !== null) Prefix = serverPrefix;
 	if(serverPrefix == null) Prefix = globalprefix;
 	osutils.cpuUsage(function(v) {
+		console.log(config.owners);
 		const embed = new Discord.MessageEmbed()
 			.setColor(0x7289DA)
 			.setThumbnail(client.user.avatarURL({ format: 'png', dynamic: true, size: 2048 }))
@@ -47,7 +49,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 			.addField('-----------------------------------------------------------------', '---------------------------------------------------------------')
 			// .addField('Platform', `\`\`\`yaml\n${osutils.platform()}\`\`\``, true)
 			.addField('VPS CPU Cores', `\`\`\`yaml\n${osutils.cpuCount()}` + ' Cores```', true)
-			.addField('CPU Usage', `\`\`\`yaml\n${(v * 100).toString().split('.')[0] + '.' + (v * 100).toString().split('.')[1].split('')[0] + (v * 100).toString().split('.')[1].split('')[1]}%\`\`\``, true)
+			// .addField('CPU Usage', `\`\`\`yaml\n${(v * 100).toString().split('.')[0] + '.' + (v * 100).toString().split('.')[1].split('')[0] + (v * 100).toString().split('.')[1].split('')[1]}%\`\`\``, true)
 			.addField('Total Memory', `\`\`\`yaml\n${osutils.totalmem().toString().split('.')[0] + '.' + osutils.totalmem().toString().split('.')[1].split('')[0] + osutils.totalmem().toString().split('.')[1].split('')[1] + ' MB'}\`\`\``, true)
 			.addField('RAM Usage Of VPS', `\`\`\`yaml\n${(osutils.totalmem() - osutils.freemem()).toString().split('.')[0]}/${osutils.totalmem().toString().split('.')[0]} MB (${(100 - osutils.freememPercentage() * 100).toString().split('.')[0] + '.' + (100 - osutils.freememPercentage() * 100).toString().split('.')[1].split('')[0] + (100 - osutils.freememPercentage() * 100).toString().split('.')[1].split('')[1]}%)\`\`\``, true)
 			.addField('RAM Usage Of Bot', `\`\`\`yaml\n${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}` + '/' + `${osutils.totalmem().toString().split('.')[0]}` + ' MB\`\`\`', true)
@@ -55,7 +57,7 @@ module.exports.run = async (client, message, args, utils, data) => {
 			.addField('Ping', `\`\`\`yaml\n${Math.round(client.ws.ping)}` + 'ms\`\`\`', true)
 			.addField('Uptime', `\`\`\`yaml\n${days + 'd ' + hours + 'h ' + minutes + 'm'}\`\`\``, true)
 			.addField('-----------------------------------------------------------------', '---------------------------------------------------------------')
-			.addField('Developers', config.owners.map(e => e.join(', ')));
+			.addField('Developers', config.owners.join(', '));
 		message.channel.send({ embed });
 	});
 
@@ -71,7 +73,7 @@ module.exports.help = {
 module.exports.config = {
 	args: false,
 	restricted: false,
-	category: 'Information',
+	category: 'Info',
 	disable: false,
 	cooldown: 1000,
 };

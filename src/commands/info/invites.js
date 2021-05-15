@@ -18,7 +18,7 @@ module.exports.run = async (client, message, args, utils) => {
 			{ }
 		}
 
-		const content = memberInvites.map(i => i.code).join('\n');
+		const content = '`' + memberInvites.map(i => i.code).join('`\n`') + '`';
 		let index = 0;
 		memberInvites.forEach(invite => index += invite.uses);
 
@@ -36,7 +36,6 @@ module.exports.run = async (client, message, args, utils) => {
 	}
 };
 
-
 module.exports.help = {
 	aliases: [],
 	name: 'invites',
@@ -47,7 +46,7 @@ module.exports.help = {
 module.exports.config = {
 	args: false,
 	restricted: false,
-	category: 'Information',
+	category: 'Info',
 	disable: false,
 	cooldown: 1000,
 };
