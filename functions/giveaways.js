@@ -39,9 +39,12 @@ module.exports = {
 		await msg.fetch();
 		const time = data.endAt - Date.now();
 		setTimeout(async () => {
+			if((await this.getByMessageID(data.messageID)).ended) return;
 			const reaction = await msg.reactions.cache.get('🎉') || msg.reactions.cache.get('843076397345144863');
 			const reacts = await reaction.users.fetch({ limit: 100 });
 			const winners = await this.choose(reacts.filter(x => !x.bot), data.winners);
+
+			if(!winners) return message.channel.send('There are not enough people in the giveaway!');
 
 			message.channel.send(`${winners.map(winner => winner.toString()).join(', ')} you won ${data.prize} Congratulations! Hosted by ${message.guild.members.cache.get(data.hoster).toString()}`, { allowedMentions: { roles: [], users: winners.map(x => x.id), parse: [] } });
 			data.ended = true;
@@ -108,8 +111,9 @@ module.exports = {
 	async choose(reactions, winners) {
 		const final = [];
 		for (let i = 0; i < winners; i++) {
-			const win = reactions.random();
-			reactions = reactions.filter(user => user.id !== win.id);
+			if(!reactions.first()) return;
+			const win = reactions.filter(x => !x.bot).random();
+			reactions = reactions.filter(user => user.id !== win.id && !user.bot);
 			final.push(win);
 		}
 		return final;
