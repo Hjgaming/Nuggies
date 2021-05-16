@@ -6,6 +6,7 @@ const config = require('../../utils/config.json');
 const axios = require('axios');
 
 module.exports = async (client) => {
+	// await automeme.updateMany({ premium: true }, { todo: [] });
 	console.log(`${client.user.username} is now online!`);
 	client.user.setActivity('bot.nuggetdev.com/premium', { type: 'WATCHING', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' });
 	if (client.user.id !== '779741162465525790') return;

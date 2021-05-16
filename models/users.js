@@ -45,6 +45,10 @@ const usersDB = new Schema({
 		type: Boolean,
 		default: false,
 	},
+	todo: {
+		type: Array,
+		default: [],
+	},
 });
 
 module.exports = mongoose.model('usersDB', usersDB);

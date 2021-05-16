@@ -85,9 +85,9 @@ module.exports = {
 		const user = await usersDB.findOne({ id: userID }).lean().cache(120);
 		if (!user) {
 			const newUs = new usersDB({ id: userID });
-			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator } = newUs;
+			const { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator, todo } = newUs;
 			await newUs.save().catch(error => console.log(error));
-			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator };
+			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator, todo };
 		}
 		else {
 			const registeredAt = user.registeredAt;
@@ -100,7 +100,8 @@ module.exports = {
 			const premiumservers = user.premiumservers;
 			const developer = user.developer;
 			const moderator = user.moderator;
-			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator };
+			const todo = user.todo;
+			return { registeredAt, blacklisted, blacklisted_reason, is_afk, afkReason, premium, tier, premiumservers, developer, moderator, todo };
 		}
 	},
 	/**
@@ -553,6 +554,20 @@ module.exports = {
 		if(data) {
 			data.points = data.points - amount;
 			data.save();
+			cachegoose.clearCache();
+			return true;
+		}
+	},
+	async todoadd(user, thing) {
+		const data = await usersDB.findOne({ id: user });
+		if(data) {
+			try {
+				data.todo.push(thing);
+				data.save();
+			}
+			catch (e) {
+				return e;
+			}
 			cachegoose.clearCache();
 			return true;
 		}

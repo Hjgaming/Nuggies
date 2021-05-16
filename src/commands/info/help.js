@@ -35,6 +35,7 @@ module.exports.run = async (client, message, args, utils) => {
 				.addField('<a:Loading:785190101105508373> Misc', `\`${prefix}help misc\``, true)
 				.addField('⚙ Utility', `\`${prefix}help utility\``, true)
 				.addField('🎙 Soundboard', `\`${prefix}help soundboard\``, true)
+				.addField('🗒️ to-do', `\`${prefix}help soundboard\``, true)
 				//  .addField('<a:music_disc:826830791115931719>', `\`${prefix}help music\``, true)
 				.setFooter('Check out our website:  https://nuggetdev.com/')
 				.setThumbnail(client.user.avatarURL({ type: 'png' }))
@@ -57,6 +58,14 @@ module.exports.run = async (client, message, args, utils) => {
 				const slashCmdsembed = new Discord.MessageEmbed()
 					.setTitle('Slash Commands')
 					.setDescription('`/meme`, `/cat`, `/8ball`, `/echo`, `/support`, `/activities` (use @Nuggies register) to register')
+					.setColor('RANDOM')
+					.setFooter('Page 1/1');
+				return message.channel.send(slashCmdsembed);
+			}
+			else if (args[0] === 'to-do') {
+				const slashCmdsembed = new Discord.MessageEmbed()
+					.setTitle('Slash Commands')
+					.setDescription('`todo add`, `todo remove`, `todo list`')
 					.setColor('RANDOM')
 					.setFooter('Page 1/1');
 				return message.channel.send(slashCmdsembed);
