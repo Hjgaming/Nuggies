@@ -1,7 +1,15 @@
+/* eslint-disable no-unused-vars */
+const mongoose = require('mongoose');
 const schema = require('../models/giveaways');
 const { giveawayEmbed } = require('../utils/utils');
+const Discord = require('discord.js');
 
 module.exports = {
+
+	/**
+	 * @returns {undefined}
+	 */
+
 	async create({
 		message, prize, hoster, winners, endAt,
 	}) {
@@ -20,6 +28,12 @@ module.exports = {
 		await this.startTimer(message, data);
 	},
 
+	/**
+	 * @param {Discord.Message} message
+	 * @param {mongoose.Document} data
+	 * @returns {undefined}
+	 */
+
 	async startTimer(message, data) {
 		const msg = await message.guild.channels.cache.get(data.channelID).messages.fetch(data.messageID);
 		await msg.fetch();
@@ -35,12 +49,22 @@ module.exports = {
 		}, time);
 	},
 
+	/**
+	 * @param {String} guildID
+	 * @returns {mongoose.Document[]}
+	 */
+
 	async getByGuildID(guildID) {
 		const docs = await schema.find({ guildID: guildID });
 
 		if (!docs[0]) return;
 		return docs;
 	},
+
+	/**
+	 * @param {String} messageID
+	 * @returns {mongoose.Document}
+	 */
 
 	async getByMessageID(messageID) {
 		const doc = await schema.findOne({ messageID: messageID });
@@ -49,6 +73,11 @@ module.exports = {
 		return doc;
 	},
 
+	/**
+	 * @param {String} channelID
+	 * @returns {mongoose.Document[]}
+	 */
+
 	async getByChannelID(channelID) {
 		const docs = await schema.find({ channelID: channelID });
 
@@ -56,13 +85,25 @@ module.exports = {
 		return docs;
 	},
 
+	/**
+	 * @param {Discord.Client} client
+	 * @param {String} messageID
+	 * @returns {Discord.User[]}
+	 */
+
 	async reroll(client, messageID) {
 		const data = await this.getByMessageID(messageID);
-		const msg = client.guilds.cache.get(data.guildID).channels.cache.get(data.channelID).messages.fetch(messageID);
-		const reaction = msg.reactions.cache.get('🎉');
-		const reacts = await reaction.users.fetch({ limit: Infinity });
+		const msg = await client.guilds.cache.get(data.guildID).channels.cache.get(data.channelID).messages.fetch(messageID);
+		const reaction = await msg.reactions.cache.get('🎉');
+		const reacts = await reaction.users.fetch({ limit: 100 });
 		return await this.choose(reacts, 1);
 	},
+
+	/**
+	 * @param {Discord.Collection<Discord.Snowflake, Discord.User>} reactions
+	 * @param {String} winners
+	 * @returns {Discord.User[]}
+	 */
 
 	async choose(reactions, winners) {
 		const final = [];
@@ -74,7 +115,17 @@ module.exports = {
 		return final;
 	},
 
-	async end(messageID) {
-		// Later...
+	/**
+	 * @param {Discord.Client} client
+	 * @param {String} messageID
+	 * @returns {Discord.User[]}
+	 */
+
+	async end(client, messageID) {
+		const data = await this.getByMessageID(messageID);
+		const msg = await client.guilds.cache.get(data.guildID).channels.cache.get(data.channelID).messages.fetch(messageID);
+		const reaction = await msg.reactions.cache.get('🎉');
+		const reacts = await reaction.users.fetch({ limit: 100 });
+		return await this.choose(reacts, data.winners);
 	},
 };

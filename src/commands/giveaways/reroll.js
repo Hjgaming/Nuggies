@@ -1,8 +1,8 @@
-const Discord = require('discord.js');
 const giveaways = require('../../../functions/giveaways');
 
 module.exports.run = async (client, message, args) => {
-
+	const win = await giveaways.reroll(client, args[0]);
+	message.channel.send(`Rerolled! ${win} is the new winner of the giveaway!`);
 };
 
 module.exports.help = {

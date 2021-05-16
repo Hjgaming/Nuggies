@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const giveaways = require('../../../functions/giveaways');
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message) => {
 	let gws = await giveaways.getByGuildID(message.guild.id);
 	if (!gws) return message.channel.send('There are no giveaways in this server!');
 	gws = gws.filter(x => x.ended !== true);
