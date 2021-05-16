@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const config = require('../../../utils/config.json');
 const user = require('../../../models/users');
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args, utils) => {
 	const target = message.mentions.members.first() || message.guild.members.cache.find((m) => m.user.id === args[0] || m.user.tag.startsWith(args[0]) || m.displayName.startsWith(args[0]));
 
 	const superMods = ['555064829946232832', '833713876628406363', '460078206326800434'];
