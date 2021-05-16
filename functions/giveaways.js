@@ -30,6 +30,8 @@ module.exports = {
 			const winners = await this.choose(reacts.filter(x => !x.bot), data.winners);
 
 			message.channel.send(`${winners.map(winner => winner.toString()).join(', ')} you won ${data.prize} Congratulations! Hosted by ${message.guild.members.cache.get(data.hoster).toString()}`, { allowedMentions: { roles: [], users: winners.map(x => x.id), parse: [] } });
+			data.ended = true;
+			data.save();
 		}, time);
 	},
 

@@ -25,6 +25,9 @@ const schema = new mongoose.Schema({
 	winners: {
 		type: Number, required: true,
 	},
+	ended: {
+		type: Boolean, default: false,
+	},
 });
 
 module.exports = mongoose.model('giveaways', schema);
